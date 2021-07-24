@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": true,
+    "baseUrl": "./",
+    "outDir": "dist",
+    "moduleResolution": "node",              
+    "jsx": "react",
+    "strict": false,                          
+    // "noImplicitAny": true,                   
+    // "strictNullChecks": true,                
+    // "strictFunctionTypes": true,             
+    // "strictBindCallApply": true,             
+    // "strictPropertyInitialization": true,    
+    // "alwaysStrict": true
+  }
+}
