@@ -64,7 +64,7 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 				};
 				return httpClient(`${apiUrl}/${resource}/${params.id}?${stringify(query)}`).then(
 					({ json }) => {
-						console.log("getOne__httpClient",json);
+						console.log("getOne__httpClient", json);
 
 						return {
 							data: json,
@@ -188,9 +188,6 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 			let download = await ref.getDownloadURL();
 			params.data.picture.src = download;
 			console.log(download);
-
-			// }
-			// }
 			return Promise.all(
 				params.ids.map((id) =>
 					httpClient(`${apiUrl}/${resource}/${id}`, {

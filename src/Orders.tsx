@@ -1,5 +1,6 @@
 import React, { cloneElement, useContext } from "react";
 import { FC } from "react";
+import RichTextInput from 'ra-input-rich-text';
 import {
 	DateInput,
 	Edit,
@@ -30,6 +31,10 @@ import {
 	required,
 	TabbedForm,
 	useGetOne,
+	ChipField,
+	NumberField,
+	SelectInput,
+	RichTextField,
 } from "react-admin";
 
 // import IconEvent from "@material-ui/icons/Event";
@@ -105,8 +110,8 @@ export const OrderList: FC = (props) => (
 			<TextField label="Город" source="cityAddress" />
 			<TextField label="Промокод" source="promo" />
 			<DateField label="Дата" source="date" />
-			<TextField label="Статус" source="status" />
-			<TextField label="Сумма" source="totalPrice" />
+			<ChipField label="Статус" source="status" />
+			<NumberField label="Сумма" source="totalPrice" />
 			{/* <EditButton basePath="/posts" /> */}
 		</Datagrid>
 	</List>
@@ -125,38 +130,46 @@ export const OrderEdit = (props) => {
 		<Edit {...props}>
 			<TabbedForm>
 				<FormTab label="Информация о заказе">
-					<TextInput disabled label="Id" source="id" />
-					<TextInput source="name" />
-					<TextInput label="Телефон" source="tel" />
+					<TextInput label="Имя" source="name" />
+					<TextInput label="Номер телефона" source="tel" />
+					<TextInput label="Электронная почта" source="email" />
 					<TextInput label="Город" source="cityAddress" />
 					<TextInput label="Адрес" source="houseNumber" />
-					<TextInput label="Дом или квартира" source="houseOrApartment" />
 					<TextInput label="Почтовый индекс" source="postalCode" />
 					<TextInput label="Промокод" source="promo" />
 					<TextInput label="Инстаграм" source="instagram" />
 					<TextInput label="Способ доставки" source="deliveryMethod" />
-					<TextInput label="Статус" source="status" />
 					<DateInput label="Дата" source="date" />
-					<NumberInput label="Сумма" source="totalPrice" />
-					<TextInput label="Комментарий" source="comment" />
+					<SelectInput
+						source="status"
+						label="Статус"
+						choices={[
+							{ id: "ordered", name: "Заказано" },
+							{ id: "shipped", name: "Отправлено" },
+							{ id: "delivered", name: "Доставлено" },
+							{ id: "cancelled", name: "Отменено" },
+						]}
+					/>
+						<BooleanInput label="Дом, не квартира" source="houseOrApartment"  />
+					<NumberInput disabled label="Сумма" source="totalPrice" />
+					<RichTextInput label="Комментарий" source="comment" />
 				</FormTab>
-				{/* <FormTab label="body">
-                <RichTextInput source="body" validate={required()} addLabel={false} />
-            </FormTab> */}
-				<FormTab label="Заказ">
+				<FormTab label="Состав заказа">
 					<JsonField
 						source="basket"
-						jsonString={false} // Set to true if the value is a string, default: false
+						jsonString={false}
 						reactJsonOptions={{
-							// Props passed to react-json-view
 							name: null,
 							collapsed: false,
 							enableClipboard: false,
 							displayDataTypes: false,
-							
 						}}
-						
 					/>
+				</FormTab>
+				<FormTab label="Мета">
+					<TextField label="ID пользователя" source="uid" />
+					<TextField label="Ссылка для подтверждения" source="confirmation_url" />
+					<TextField label="ID в базе данных" source="id" />
 				</FormTab>
 			</TabbedForm>
 		</Edit>
