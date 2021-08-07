@@ -53,6 +53,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var config_1 = require("./config");
+var Database_1 = require("./Database");
+var orders_1 = require("./routers/orders");
 var express = require("express");
 var mysql = require("mysql2");
 var cors = require("cors");
@@ -74,600 +77,553 @@ var gmail = {
     email: "god.nota.tl@gmail.com",
     password: "goldik12"
 };
-var port = process.env.PORT || 25565;
-var tokenKey = crypto2.randomBytes(256).toString("base64");
-var saltRounds = 12;
+var port = process.env.PORT || 3001;
+var saltRounds = 7;
 var myPlaintextPassword = "admin";
 bcrypt.genSalt(saltRounds, function (err, salt) {
     bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
-        // console.log(hash);
+        console.log(hash);
     });
 });
 function main() {
     var _this = this;
     try {
-        var s = process.env.CLEARDB_DATABASE_URL;
-        var s_proto = s ? s.substring(8) : " ";
-        var s_login = s ? s_proto.substring(0, s_proto.indexOf(":")) : " ";
-        var s_password = s ? s_proto.substring(s_proto.indexOf(":") + 1, s_proto.indexOf("@")) : " ";
-        var url = s ? s_proto.split("@")[1] : " ";
-        var urlToConnect = s ? url.substring(0, url.indexOf("/")) : " ";
-        var dbName = s ? url.substring(url.indexOf("/") + 1, url.indexOf("?")) : " ";
-        var pool_1 = mysql
-            .createPool({
-            host: process.env.CLEARDB_DATABASE_URL ? urlToConnect : "eu-cdbr-west-01.cleardb.com",
-            user: process.env.CLEARDB_DATABASE_URL ? s_login : "b590467e576f58",
-            database: process.env.CLEARDB_DATABASE_URL ? dbName : "heroku_0772a32464d9340",
-            password: process.env.CLEARDB_DATABASE_URL ? s_password : "b84b016b"
-        })
-            .promise();
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(cors());
-        app.post("/api/orders", function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var basket, name_1, tel, email_1, cityAddress, houseNumber, houseOrApartment, postIndex, promo, instagram, comment, deliveryMethod, paymentMethod, status_1, rows, e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 6, , 7]);
-                        console.log("req.body", req.body);
-                        basket = req.body.basket;
-                        name_1 = req.body.orderData.name;
-                        tel = req.body.orderData.tel;
-                        email_1 = req.body.orderData.email;
-                        cityAddress = req.body.orderData.cityAddress;
-                        houseNumber = req.body.orderData.houseNumber;
-                        houseOrApartment = req.body.orderData.houseOrApartment;
-                        postIndex = req.body.orderData.postIndex;
-                        promo = req.body.orderData.promo;
-                        instagram = req.body.orderData.instagram;
-                        comment = req.body.orderData.comment;
-                        deliveryMethod = req.body.deliveryData.method;
-                        paymentMethod = req.body.paymentData.method;
-                        if (!basket)
-                            throw createError(400, "basket not found");
-                        if (!name_1)
-                            throw createError(400, "name not found");
-                        if (!tel)
-                            throw createError(400, "tel number not found");
-                        if (!email_1)
-                            throw createError(400, "email not found");
-                        if (!cityAddress)
-                            throw createError(400, "cityAddress not found");
-                        if (!houseNumber)
-                            throw createError(400, "houseNumber not found");
-                        if (houseOrApartment === null)
-                            throw createError(400, "houseOrApartment not found");
-                        if (!postIndex)
-                            throw createError(400, "postalCode not found");
-                        if (!deliveryMethod)
-                            throw createError(400, "deliveryMethod not found");
-                        if (!(paymentMethod === "raif")) return [3 /*break*/, 1];
-                        return [3 /*break*/, 5];
-                    case 1:
-                        if (!(paymentMethod === "sber")) return [3 /*break*/, 2];
-                        return [3 /*break*/, 5];
-                    case 2:
-                        if (!(paymentMethod === "on_receiving")) return [3 /*break*/, 4];
-                        status_1 = "delivered";
-                        return [4 /*yield*/, pool_1.execute("\n                INSERT INTO orders (\n                    basket,\n                    name,\n                    tel,\n                    email,\n                    cityAddress,\n                    houseNumber,\n                    houseOrApartment,\n                    postalCode,\n                    promo,\n                    instagram,\n                    comment,\n                    deliveryMethod,\n                    status,\n                    uid,\n                    date,\n                    confirmation_url\n                )\n                VALUES (\n                    '" + JSON.stringify(basket) + "',\n                    '" + name_1 + "',\n                    '" + tel + "',\n                    '" + email_1 + "',\n                    '" + cityAddress + "',\n                    '" + houseNumber + "',\n                    '" + houseOrApartment + "',\n                    '" + postIndex + "',\n                    '" + promo + "',\n                    '" + instagram + "',\n                    '" + comment + "',\n                    '" + deliveryMethod + "',\n                    '" + status_1 + "',\n                    '" + null + "',\n                    '" + null + "',\n                    '" + null + "'\n                )\n            ")];
-                    case 3:
-                        rows = (_a.sent())[0];
-                        res.status(201);
-                        return [2 /*return*/, res.json({
-                                message: "OK"
-                            })];
-                    case 4:
-                        console.log("Invalid payment method");
-                        throw createError(400, "Payment method '" + paymentMethod + "' not found");
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
-                        e_1 = _a.sent();
-                        // console.log(e);
-                        next(e_1);
-                        return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.post("/updateOrder", function (req, res, next) {
-            var info = req.body;
-            console.log(info);
-            res.status(200).send("OK");
-        });
-        app.get("/api/orders", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var authorization, decoded, dbOrders, dbItems_1, orders, total, slicedOrders, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        authorization = req.query._token;
-                        decoded = jwt.verify(authorization, tokenKey);
-                        if (!decoded)
-                            return [2 /*return*/];
-                        console.log("app.get(\"/api/orders\"", req.path, req.query, req.params);
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM orders")];
-                    case 1:
-                        dbOrders = (_a.sent())[0];
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM items")];
-                    case 2:
-                        dbItems_1 = (_a.sent())[0];
-                        orders = dbOrders.map(function (it, index) {
-                            //Преобразование bucket из строки в массив
-                            if (it.basket) {
-                                try {
-                                    it.basket = JSON.parse(it.basket);
-                                }
-                                catch (e) {
-                                    console.log("Failed to parse backet", it, index, e.message, e.type);
-                                }
-                            }
-                            return it;
-                        });
-                        total = orders.length;
-                        res.setHeader("X-Total-Count", total.toString());
-                        res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
-                        orders.forEach(function (it) {
-                            //Рассчет поля TotalPrice(суммарная стоимость заказа) для каждого заказа исходя из данных, переданных в backet
-                            it.basket.forEach(function (i) {
-                                var itemId = i.id;
-                                var itemQuantity = i.quantity;
-                                var item = dbItems_1.find(function (i) { return i.id === itemId; });
-                                if (!item) {
-                                    console.log("Cant find item with id=" + itemId, itemId);
-                                    return;
-                                }
-                                var itemPrice = parseFloat(item.price);
-                                if (!itemPrice) {
-                                    console.log("Cant parse item with price=" + itemPrice, item.price);
-                                    return;
-                                }
-                                if (!itemQuantity) {
-                                    console.log("Backet dont have quantity, value=" + itemQuantity);
-                                    return;
-                                }
-                                if (!item.name) {
-                                    console.log("Name not found, value=" + item.name);
-                                    return;
-                                }
-                                var orderPrice = itemPrice * itemQuantity;
-                                if (!it.totalPrice) {
-                                    it.totalPrice = 0;
-                                }
-                                it.totalPrice += orderPrice;
-                            });
-                        });
-                        if (req.query.date_gte) {
-                            //Фильтр "После даты"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return new Date(it.date) >= new Date(req.query.date_gte);
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error date_gte.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.date_lte) {
-                            //Фильтр "До даты"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return new Date(it.date) <= new Date(req.query.date_lte);
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error date_lte.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.price_gte) {
-                            //Фильтр "Стоимость больше чем"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return it.totalPrice >= ~~req.query.price_gte;
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error price_gte.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.price_lte) {
-                            //Фильтр "Стоимость меньше чем"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return it.totalPrice <= ~~req.query.price_lte;
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error price_lte.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.status) {
-                            //Фильтр "Статус заказа"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    // console.log(">>>>>>>>>>>>>>>>",req.query.status, typeof req.query.status , req.query.status instanceof Array)
-                                    if (req.query.status instanceof Array) {
-                                        // console.log(">>>>>>>>>>>>>>>1",(req.query.status as Array<string>).includes(it.status));
-                                        return req.query.status.includes(it.status);
-                                    }
-                                    else {
-                                        // console.log(">>>>>>>>>>>>>>>2",req.query.status == it.status,req.query.status,it.status);
-                                        return req.query.status == it.status;
-                                    }
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error status.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.search_city) {
-                            //Фильтр "Поиск по городу"
-                            try {
-                                // orders = orders.filter((it) => {
-                                // 	return it.cityAddress.toLowerCase() == (req.query.search_city as string).toLowerCase();
-                                // });
-                                orders = orders.filter(function (it) {
-                                    return it.cityAddress.toLowerCase().includes(req.query.search_city.toLowerCase());
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error search_city.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.search_name) {
-                            //Фильтр "Поиск по имени"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return it.name.toLowerCase().includes(req.query.search_name.toLowerCase());
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error search_name.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.search_promo) {
-                            //Фильтр "Поиск по промокоду"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return it.promo.toLowerCase().includes(req.query.search_promo.toLowerCase());
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error search_promo.", e.message, e.type);
-                            }
-                        }
-                        if (req.query.search_id) {
-                            //Фильтр "Поиск по id"
-                            try {
-                                orders = orders.filter(function (it) {
-                                    return it.id.toString().toLowerCase() == req.query.search_id.toLowerCase();
-                                });
-                            }
-                            catch (e) {
-                                console.log("Filter error search_id.", e.message, e.type);
-                            }
-                        }
-                        slicedOrders = orders.slice(~~req.query._start, ~~req.query._end);
-                        if (req.query._sort && req.query._order) {
-                            if (req.query._sort == "date") {
-                                if (req.query._order == "ASC") {
-                                    console.log("sort 1");
-                                    slicedOrders.sort(function (a, b) {
-                                        //возр
-                                        var da = new Date(a.date).getTime();
-                                        var db = new Date(b.date).getTime();
-                                        return da > db ? 1 : -1;
-                                    });
-                                }
-                                else {
-                                    console.log("sort 2");
-                                    slicedOrders.sort(function (a, b) {
-                                        var da = new Date(a.date).getTime();
-                                        var db = new Date(b.date).getTime();
-                                        return da > db ? 0 : 1;
-                                    });
-                                }
-                            }
-                        }
-                        return [2 /*return*/, res.send(slicedOrders)];
-                    case 3:
-                        e_2 = _a.sent();
-                        res.setHeader("X-Total-Count", 0);
-                        res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
-                        console.log(e_2);
-                        res.send(e_2);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.get("/api/orders/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var dbOrders, dbItems_2, order_1, total, e_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        console.log("app.get(\"/api/orders/id\"", req.path, req.query, req.params);
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM orders WHERE id = ?", [req.params.id])];
-                    case 1:
-                        dbOrders = (_a.sent())[0];
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM items")];
-                    case 2:
-                        dbItems_2 = (_a.sent())[0];
-                        order_1 = dbOrders.map(function (it, index) {
-                            //Преобразование bucket из строки в массив
-                            if (it.basket) {
-                                try {
-                                    it.basket = JSON.parse(it.basket);
-                                }
-                                catch (e) {
-                                    console.log("Failed to parse backet", it, index, e.message, e.type);
-                                }
-                            }
-                            return it;
-                        })[0];
-                        //Рассчет поля TotalPrice(суммарная стоимость заказа) для каждого заказа исходя из данных, переданных в backet
-                        order_1.basket.forEach(function (i) {
-                            var _a;
-                            var itemId = i.id;
-                            var itemQuantity = i.quantity;
-                            var item = dbItems_2.find(function (i) { return i.id === itemId; });
-                            if (!item) {
-                                console.log("Cant find item with id=" + itemId, itemId);
-                                return;
-                            }
-                            var itemPrice = parseFloat(item.price);
-                            if (!itemPrice) {
-                                console.log("Cant parse item with price=" + itemPrice, item.price);
-                                return;
-                            }
-                            if (!itemQuantity) {
-                                console.log("Backet dont have quantity, value=" + itemQuantity);
-                                return;
-                            }
-                            if (!item.name) {
-                                console.log("Name not found, value=" + item.name);
-                                return;
-                            }
-                            var orderPrice = itemPrice * itemQuantity;
-                            if (!order_1.totalPrice) {
-                                order_1.totalPrice = 0;
-                            }
-                            i.name = (_a = item.name) !== null && _a !== void 0 ? _a : "NO NAME";
-                            order_1.totalPrice += orderPrice;
-                        });
-                        total = 1;
-                        res.setHeader("X-Total-Count", total.toString());
-                        res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
-                        res.send(order_1);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_3 = _a.sent();
-                        console.log(e_3);
-                        res.send(e_3);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.put("/api/orders/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var authorization, decoded, id, name_2, tel, email_2, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status_2, uid, date, confirmation_url, totalPrice, dbOrders, e_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        console.log("/api/orders/:id", req.params, req.body);
-                        authorization = req.header("authorization");
-                        decoded = jwt.verify(authorization, tokenKey);
-                        id = ~~req.params.id;
-                        name_2 = req.body.name;
-                        tel = req.body.tel;
-                        email_2 = req.body.email;
-                        cityAddress = req.body.cityAddress;
-                        houseNumber = req.body.houseNumber;
-                        houseOrApartment = req.body.houseOrApartment;
-                        postalCode = req.body.postalCode;
-                        promo = req.body.promo;
-                        instagram = req.body.instagram;
-                        comment = req.body.comment;
-                        deliveryMethod = req.body.deliveryMethod;
-                        status_2 = req.body.status;
-                        uid = req.body.uid;
-                        date = new Date(req.body.date);
-                        confirmation_url = req.body.confirmation_url;
-                        totalPrice = req.body.totalPrice;
-                        return [4 /*yield*/, pool_1.execute("SELECT id FROM orders WHERE id = ?", [
-                                req.params.id,
-                            ])];
-                    case 1:
-                        dbOrders = (_a.sent())[0];
-                        if (!dbOrders[0].id) {
-                            console.log("Order with id=" + id + " not found");
-                            res.status(404);
-                            return [2 /*return*/, res.send({ message: "Order with id=" + id + " not found" })];
-                        }
-                        return [4 /*yield*/, pool_1.execute("UPDATE orders SET " +
-                                "name = ? , " +
-                                "tel = ? , " +
-                                "email = ? , " +
-                                "cityAddress = ? , " +
-                                "houseNumber = ? , " +
-                                "houseOrApartment = ? , " +
-                                "postalCode = ? , " +
-                                "promo = ? , " +
-                                "instagram = ? , " +
-                                "comment = ? , " +
-                                "deliveryMethod = ? , " +
-                                "status = ? , " +
-                                "uid = ? , " +
-                                "date = ? , " +
-                                "confirmation_url = ? " +
-                                "WHERE id = ?", [
-                                name_2,
-                                tel,
-                                email_2,
-                                cityAddress,
-                                houseNumber,
-                                houseOrApartment,
-                                postalCode,
-                                promo,
-                                instagram,
-                                comment,
-                                deliveryMethod,
-                                status_2,
-                                uid,
-                                date,
-                                confirmation_url,
-                                id,
-                            ])];
-                    case 2:
-                        _a.sent();
-                        res.status(200);
-                        return [2 /*return*/, res.send({ id: id })];
-                    case 3:
-                        e_4 = _a.sent();
-                        console.log(e_4);
-                        res.send(e_4);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        app["delete"]("/api/orders/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var id, authorization, decoded, e_5;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        id = req.params.id;
-                        authorization = req.header("authorization");
-                        decoded = jwt.verify(authorization, tokenKey);
-                        if (!(decoded.id && decoded.iat)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, pool_1.execute("\n                    DELETE FROM orders\n                    WHERE id = '" + id + "'\n                ")];
-                    case 1:
-                        _a.sent();
-                        res.send({ id: id });
-                        _a.label = 2;
-                    case 2: return [3 /*break*/, 4];
-                    case 3:
-                        e_5 = _a.sent();
-                        console.log(e_5);
-                        res.send(e_5);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.get("/api/items", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var rows, string, items, total, slicer, e_6;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM items")];
-                    case 1:
-                        rows = (_a.sent())[0];
-                        string = JSON.stringify(rows);
-                        items = JSON.parse(string);
-                        if (req.query.name) {
-                            items = items.filter(function (e) {
-                                return e.name.toLowerCase().includes(req.query.name.toLowerCase());
-                            });
-                        }
-                        total = items.length;
-                        res.set("X-Total-Count", total.toString());
-                        res.header("Access-Control-Expose-Headers", "X-Total-Count");
-                        slicer = items.slice(~~req.query._start, ~~req.query._end);
-                        slicer = slicer.map(function (item) {
-                            if (item.image.length > 0) {
-                                var picture = JSON.parse(item.image);
-                                item.picture = picture;
-                            }
-                            item.price = item.price.replace(",", ".");
-                            item.price = item.price.replace(/\s+/g, "");
-                            return item;
-                        });
-                        if (req.query.priceSort) {
-                            slicer = slicer.sort(function (a, b) {
-                                return req.query.priceSort == "decrease"
-                                    ? Number(b.price) - Number(a.price)
-                                    : Number(a.price) - Number(b.price);
-                            });
-                        }
-                        res.send(slicer);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        e_6 = _a.sent();
-                        console.log(e_6);
-                        res.send(e_6);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.put("/api/items/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var id, name_3, price, kal, size, rating, description, picture, quantity, pictureString, authorization, decoded, e_7;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        console.log("/api/items/:id PUT", req.params, req.body);
-                        id = ~~req.params.id;
-                        name_3 = req.body.name;
-                        price = req.body.price;
-                        kal = req.body.kal;
-                        size = req.body.kal;
-                        rating = req.body.rating;
-                        description = req.body.description;
-                        picture = req.body.picture;
-                        quantity = req.body.quantity;
-                        pictureString = JSON.stringify(picture);
-                        authorization = req.header("authorization");
-                        decoded = jwt.verify(authorization, tokenKey);
-                        if (!(decoded.id && decoded.iat)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, pool_1.execute("\n                    UPDATE items SET\n                        name = '" + name_3 + "',\n                        price = '" + price + "',\n                        kal = '" + kal + "',\n                        size = '" + size + "',\n                        rating = '" + rating + "',\n                        description = '" + description + "',\n                        quantity = '" + quantity + "',\n                        image = '" + pictureString + "'\n                    WHERE id = '" + id + "'\n                ")];
-                    case 1:
-                        _a.sent();
-                        res.send({ id: id });
-                        _a.label = 2;
-                    case 2: return [3 /*break*/, 4];
-                    case 3:
-                        e_7 = _a.sent();
-                        console.log(e_7);
-                        res.send(e_7);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
+        app.use("/api/orders", orders_1["default"]);
+        // app.post("/api/orders", async (req, res, next) => {
+        // 	try {
+        // 		console.log("req.body", req.body);
+        // 		const basket: Array<IBasket> = req.body.basket;
+        // 		/* ORDERDATA */
+        // 		const name: string = req.body.orderData.name; // customer name : String
+        // 		const tel: string = req.body.orderData.tel; // telephone number : String
+        // 		const email: string = req.body.orderData.email; // email : String
+        // 		const cityAddress: string = req.body.orderData.cityAddress; // city, address : String
+        // 		const houseNumber: string = req.body.orderData.houseNumber; // house / apartment number : String
+        // 		const houseOrApartment: boolean = req.body.orderData.houseOrApartment; // 'house' (true) or 'apartment' (false) : Boolean
+        // 		const postIndex: string = req.body.orderData.postIndex; // postalCode : String
+        // 		const promo: string = req.body.orderData.promo; // promo : String
+        // 		const instagram: string = req.body.orderData.instagram; // instagram : String
+        // 		const comment: string = req.body.orderData.comment; // comment : String
+        // 		/* DELIVERYDATA */
+        // 		const deliveryMethod: number = req.body.deliveryData.method; // delivery method : Number
+        // 		/* PAYMENTDATA */
+        // 		const paymentMethod: paymentMethod = req.body.paymentData.method; // payment method : yandex || sber || onDelivery
+        // 		if (!basket) throw createError(400, `basket not found`);
+        // 		if (!name) throw createError(400, `name not found`);
+        // 		if (!tel) throw createError(400, `tel number not found`);
+        // 		if (!email) throw createError(400, `email not found`);
+        // 		if (!cityAddress) throw createError(400, `cityAddress not found`);
+        // 		if (!houseNumber) throw createError(400, `houseNumber not found`);
+        // 		if (houseOrApartment === null) throw createError(400, `houseOrApartment not found`);
+        // 		if (!postIndex) throw createError(400, `postalCode not found`);
+        // 		if (!deliveryMethod) throw createError(400, `deliveryMethod not found`);
+        // 		// if (!promo) throw createError(400, `promo number not found`);
+        // 		// if (!instagram) throw createError(400, `instagram not found`);
+        // 		// if (!comment) throw createError(400, `comment not found`);
+        // 		if (paymentMethod === "raif") {
+        // 		} else if (paymentMethod === "sber") {
+        // 		} else if (paymentMethod === "on_receiving") {
+        // 			const status: OrderStatus = "delivered";
+        // 			const [rows] = await pool.execute(
+        // 				`
+        //             INSERT INTO orders (
+        //                 basket,
+        //                 name,
+        //                 tel,
+        //                 email,
+        //                 cityAddress,
+        //                 houseNumber,
+        //                 houseOrApartment,
+        //                 postalCode,
+        //                 promo,
+        //                 instagram,
+        //                 comment,
+        //                 deliveryMethod,
+        //                 status,
+        //                 uid,
+        //                 date,
+        //                 confirmation_url
+        //             )
+        //             VALUES (
+        //                 '${JSON.stringify(basket)}',
+        //                 '${name}',
+        //                 '${tel}',
+        //                 '${email}',
+        //                 '${cityAddress}',
+        //                 '${houseNumber}',
+        //                 '${houseOrApartment}',
+        //                 '${postIndex}',
+        //                 '${promo}',
+        //                 '${instagram}',
+        //                 '${comment}',
+        //                 '${deliveryMethod}',
+        //                 '${status}',
+        //                 '${null}',
+        //                 '${null}',
+        //                 '${null}'
+        //             )
+        //         `
+        // 			);
+        // 			res.status(201);
+        // 			return res.json({
+        // 				message: "OK",
+        // 			});
+        // 		} else {
+        // 			console.log("Invalid payment method");
+        // 			throw createError(400, `Payment method '${paymentMethod}' not found`);
+        // 		}
+        // 	} catch (e) {
+        // 		// console.log(e);
+        // 		next(e);
+        // 	}
+        // });
+        // app.post("/updateOrder", (req, res, next) => {
+        // 	const info = req.body;
+        // 	console.log(info);
+        // 	res.status(200).send("OK");
+        // });
+        // app.get("/api/orders", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const authorization = req.query._token;
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		if (!decoded) return;
+        // 		console.log(`app.get("/api/orders"`, req.path, req.query, req.params);
+        // 		const [dbOrders] = await pool.execute(`SELECT * FROM orders`);
+        // 		const [dbItems] = await pool.execute(`SELECT * FROM items`);
+        // 		// console.log("dbItems>>>", dbOrders, dbItems);
+        // 		let orders: IDBOrder[] = dbOrders.map((it, index) => {
+        // 			//Преобразование bucket из строки в массив
+        // 			if (it.basket) {
+        // 				try {
+        // 					it.basket = JSON.parse(it.basket as string);
+        // 				} catch (e) {
+        // 					console.log("Failed to parse backet", it, index, e.message, e.type);
+        // 				}
+        // 			}
+        // 			return it;
+        // 		});
+        // 		const total = orders.length;
+        // 		res.setHeader("X-Total-Count", total.toString());
+        // 		res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+        // 		orders.forEach((it) => {
+        // 			//Рассчет поля TotalPrice(суммарная стоимость заказа) для каждого заказа исходя из данных, переданных в backet
+        // 			it.basket.forEach((i) => {
+        // 				const itemId = i.id;
+        // 				const itemQuantity = i.quantity;
+        // 				const item = dbItems.find((i) => i.id === itemId);
+        // 				if (!item) {
+        // 					console.log(`Cant find item with id=${itemId}`, itemId);
+        // 					return;
+        // 				}
+        // 				const itemPrice = parseFloat(item.price);
+        // 				if (!itemPrice) {
+        // 					console.log(`Cant parse item with price=${itemPrice}`, item.price);
+        // 					return;
+        // 				}
+        // 				if (!itemQuantity) {
+        // 					console.log(`Backet dont have quantity, value=${itemQuantity}`);
+        // 					return;
+        // 				}
+        // 				if (!item.name) {
+        // 					console.log(`Name not found, value=${item.name}`);
+        // 					return;
+        // 				}
+        // 				const orderPrice = itemPrice * itemQuantity;
+        // 				if (!it.totalPrice) {
+        // 					it.totalPrice = 0;
+        // 				}
+        // 				it.totalPrice += orderPrice;
+        // 			});
+        // 		});
+        // 		if (req.query.date_gte) {
+        // 			//Фильтр "После даты"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					return new Date(it.date) >= new Date(req.query.date_gte as string);
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error date_gte.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.date_lte) {
+        // 			//Фильтр "До даты"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					return new Date(it.date) <= new Date(req.query.date_lte as string);
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error date_lte.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.price_gte) {
+        // 			//Фильтр "Стоимость больше чем"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					return it.totalPrice >= ~~req.query.price_gte;
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error price_gte.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.price_lte) {
+        // 			//Фильтр "Стоимость меньше чем"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					return it.totalPrice <= ~~req.query.price_lte;
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error price_lte.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.status) {
+        // 			//Фильтр "Статус заказа"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					// console.log(">>>>>>>>>>>>>>>>",req.query.status, typeof req.query.status , req.query.status instanceof Array)
+        // 					if (req.query.status instanceof Array) {
+        // 						// console.log(">>>>>>>>>>>>>>>1",(req.query.status as Array<string>).includes(it.status));
+        // 						return (req.query.status as Array<string>).includes(it.status);
+        // 					} else {
+        // 						// console.log(">>>>>>>>>>>>>>>2",req.query.status == it.status,req.query.status,it.status);
+        // 						return req.query.status == it.status;
+        // 					}
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error status.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.search_city) {
+        // 			//Фильтр "Поиск по городу"
+        // 			try {
+        // 				// orders = orders.filter((it) => {
+        // 				// 	return it.cityAddress.toLowerCase() == (req.query.search_city as string).toLowerCase();
+        // 				// });
+        // 				orders = orders.filter((it) =>
+        // 					it.cityAddress.toLowerCase().includes((req.query.search_city as string).toLowerCase())
+        // 				);
+        // 			} catch (e) {
+        // 				console.log("Filter error search_city.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.search_name) {
+        // 			//Фильтр "Поиск по имени"
+        // 			try {
+        // 				orders = orders.filter((it) =>
+        // 					it.name.toLowerCase().includes((req.query.search_name as string).toLowerCase())
+        // 				);
+        // 			} catch (e) {
+        // 				console.log("Filter error search_name.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.search_promo) {
+        // 			//Фильтр "Поиск по промокоду"
+        // 			try {
+        // 				orders = orders.filter((it) =>
+        // 					it.promo.toLowerCase().includes((req.query.search_promo as string).toLowerCase())
+        // 				);
+        // 			} catch (e) {
+        // 				console.log("Filter error search_promo.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		if (req.query.search_id) {
+        // 			//Фильтр "Поиск по id"
+        // 			try {
+        // 				orders = orders.filter((it) => {
+        // 					return it.id.toString().toLowerCase() == (req.query.search_id as string).toLowerCase();
+        // 				});
+        // 			} catch (e) {
+        // 				console.log("Filter error search_id.", e.message, e.type);
+        // 			}
+        // 		}
+        // 		let slicedOrders = orders.slice(~~req.query._start, ~~req.query._end);
+        // 		if (req.query._sort && req.query._order) {
+        // 			if (req.query._sort == "date") {
+        // 				if (req.query._order == "ASC") {
+        // 					console.log("sort 1");
+        // 					slicedOrders.sort((a, b) => {
+        // 						//возр
+        // 						const da = new Date(a.date).getTime();
+        // 						const db = new Date(b.date).getTime();
+        // 						return da > db ? 1 : -1;
+        // 					});
+        // 				} else {
+        // 					console.log("sort 2");
+        // 					slicedOrders.sort((a, b) => {
+        // 						const da = new Date(a.date).getTime();
+        // 						const db = new Date(b.date).getTime();
+        // 						return da > db ? 0 : 1;
+        // 					});
+        // 				}
+        // 			}
+        // 		}
+        // 		return res.send(slicedOrders);
+        // 	} catch (e) {
+        // 		res.setHeader("X-Total-Count", 0);
+        // 		res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.get("/api/orders/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		console.log(`app.get("/api/orders/id"`, req.path, req.query, req.params);
+        // 		const [dbOrders] = await pool.execute(`SELECT * FROM orders WHERE id = ?`, [req.params.id]);
+        // 		const [dbItems] = await pool.execute(`SELECT * FROM items`);
+        // 		let order: IDBOrder = dbOrders.map((it, index) => {
+        // 			//Преобразование bucket из строки в массив
+        // 			if (it.basket) {
+        // 				try {
+        // 					it.basket = JSON.parse(it.basket as string);
+        // 				} catch (e) {
+        // 					console.log("Failed to parse backet", it, index, e.message, e.type);
+        // 				}
+        // 			}
+        // 			return it;
+        // 		})[0];
+        // 		//Рассчет поля TotalPrice(суммарная стоимость заказа) для каждого заказа исходя из данных, переданных в backet
+        // 		order.basket.forEach((i) => {
+        // 			const itemId = i.id;
+        // 			const itemQuantity = i.quantity;
+        // 			const item: IDBItem = dbItems.find((i) => i.id === itemId);
+        // 			if (!item) {
+        // 				console.log(`Cant find item with id=${itemId}`, itemId);
+        // 				return;
+        // 			}
+        // 			const itemPrice = parseFloat(item.price);
+        // 			if (!itemPrice) {
+        // 				console.log(`Cant parse item with price=${itemPrice}`, item.price);
+        // 				return;
+        // 			}
+        // 			if (!itemQuantity) {
+        // 				console.log(`Backet dont have quantity, value=${itemQuantity}`);
+        // 				return;
+        // 			}
+        // 			if (!item.name) {
+        // 				console.log(`Name not found, value=${item.name}`);
+        // 				return;
+        // 			}
+        // 			const orderPrice = itemPrice * itemQuantity;
+        // 			if (!order.totalPrice) {
+        // 				order.totalPrice = 0;
+        // 			}
+        // 			i.name = item.name ?? "NO NAME";
+        // 			order.totalPrice += orderPrice;
+        // 		});
+        // 		const total = 1;
+        // 		res.setHeader("X-Total-Count", total.toString());
+        // 		res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+        // 		res.send(order);
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.put("/api/orders/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		console.log("/api/orders/:id", req.params, req.body);
+        // 		const authorization = req.header("authorization");
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		const id: number = ~~req.params.id;
+        // 		const name: string = req.body.name;
+        // 		const tel: string = req.body.tel;
+        // 		const email: string = req.body.email;
+        // 		const cityAddress: string = req.body.cityAddress;
+        // 		const houseNumber: string = req.body.houseNumber;
+        // 		const houseOrApartment: boolean = req.body.houseOrApartment;
+        // 		const postalCode: string = req.body.postalCode;
+        // 		const promo: string = req.body.promo;
+        // 		const instagram: string = req.body.instagram;
+        // 		const comment: string = req.body.comment;
+        // 		const deliveryMethod: string = req.body.deliveryMethod;
+        // 		const status: OrderStatus = req.body.status;
+        // 		const uid: string = req.body.uid;
+        // 		const date: Date = new Date(req.body.date);
+        // 		const confirmation_url: string = req.body.confirmation_url;
+        // 		const totalPrice: string = req.body.totalPrice;
+        // 		const [dbOrders]: [IDBOrder[]] = await pool.execute("SELECT id FROM orders WHERE id = ?", [
+        // 			req.params.id,
+        // 		]);
+        // 		if (!dbOrders[0].id) {
+        // 			console.log(`Order with id=${id} not found`);
+        // 			res.status(404);
+        // 			return res.send({ message: `Order with id=${id} not found` });
+        // 		}
+        // 		await pool.execute(
+        // 			"UPDATE orders SET " +
+        // 				"name = ? , " +
+        // 				"tel = ? , " +
+        // 				"email = ? , " +
+        // 				"cityAddress = ? , " +
+        // 				"houseNumber = ? , " +
+        // 				"houseOrApartment = ? , " +
+        // 				"postalCode = ? , " +
+        // 				"promo = ? , " +
+        // 				"instagram = ? , " +
+        // 				"comment = ? , " +
+        // 				"deliveryMethod = ? , " +
+        // 				"status = ? , " +
+        // 				"uid = ? , " +
+        // 				"date = ? , " +
+        // 				"confirmation_url = ? " +
+        // 				"WHERE id = ?",
+        // 			[
+        // 				name,
+        // 				tel,
+        // 				email,
+        // 				cityAddress,
+        // 				houseNumber,
+        // 				houseOrApartment,
+        // 				postalCode,
+        // 				promo,
+        // 				instagram,
+        // 				comment,
+        // 				deliveryMethod,
+        // 				status,
+        // 				uid,
+        // 				date,
+        // 				confirmation_url,
+        // 				id,
+        // 			]
+        // 		);
+        // 		res.status(200);
+        // 		return res.send({ id: id });
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.delete("/api/orders/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const id = req.params.id;
+        // 		const authorization = req.header("authorization");
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		if (decoded.id && decoded.iat) {
+        // 			await pool.execute(
+        // 				`
+        //                 DELETE FROM orders
+        //                 WHERE id = '${id}'
+        //             `
+        // 			);
+        // 			res.send({ id: id });
+        // 		}
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.get("/api/items", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const [rows] = await pool.execute(`SELECT * FROM items`);
+        // 		const string = JSON.stringify(rows);
+        // 		let items: IDBItem[] = JSON.parse(string);
+        // 		if (req.query.name) {
+        // 			items = items.filter((e) =>
+        // 				e.name.toLowerCase().includes((req.query.name as string).toLowerCase())
+        // 			);
+        // 		}
+        // 		const total = items.length;
+        // 		res.set("X-Total-Count", total.toString());
+        // 		res.header("Access-Control-Expose-Headers", "X-Total-Count");
+        // 		let slicer = items.slice(~~req.query._start, ~~req.query._end);
+        // 		slicer = slicer.map((item) => {
+        // 			if (item.image.length > 0) {
+        // 				let picture: IDBImage = JSON.parse(item.image);
+        // 				item.picture = picture;
+        // 			}
+        // 			item.price = item.price.replace(",", ".");
+        // 			item.price = item.price.replace(/\s+/g, "");
+        // 			return item;
+        // 		});
+        // 		if (req.query.priceSort) {
+        // 			slicer = slicer.sort((a, b) => {
+        // 				return req.query.priceSort == "decrease"
+        // 					? Number(b.price) - Number(a.price)
+        // 					: Number(a.price) - Number(b.price);
+        // 			});
+        // 		}
+        // 		res.send(slicer);
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.put("/api/items/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		console.log("/api/items/:id PUT", req.params, req.body);
+        // 		const id: number = ~~req.params.id;
+        // 		const name: string = req.body.name;
+        // 		const price: string = req.body.price;
+        // 		const kal: string = req.body.kal;
+        // 		const size: string = req.body.kal;
+        // 		const rating: string = req.body.rating;
+        // 		const description: string = req.body.description;
+        // 		const picture: IDBImage = req.body.picture;
+        // 		const quantity: number = req.body.quantity;
+        // 		const pictureString: string = JSON.stringify(picture);
+        // 		const authorization = req.header("authorization");
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		if (decoded.id && decoded.iat) {
+        // 			await pool.execute(
+        // 				`
+        //                 UPDATE items SET
+        //                     name = '${name}',
+        //                     price = '${price}',
+        //                     kal = '${kal}',
+        //                     size = '${size}',
+        //                     rating = '${rating}',
+        //                     description = '${description}',
+        //                     quantity = '${quantity}',
+        //                     image = '${pictureString}'
+        //                 WHERE id = '${id}'
+        //             `
+        // 			);
+        // 			res.send({ id: id });
+        // 		}
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
         app.post("/api/authenticate", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var rows, string, admin, access, e_8;
+            var rows, string, adminDB, access, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM admins WHERE username = '" + req.body.username + "'")];
+                        // const [rows] = await pool.execute(
+                        // 	`SELECT * FROM admins WHERE username = '${req.body.username}'`
+                        // );
+                        console.log("1", req.body.username);
+                        return [4 /*yield*/, Database_1["default"].executeAny("SELECT * FROM admins WHERE username = '" + req.body.username + "'")];
                     case 1:
-                        rows = (_a.sent())[0];
+                        rows = _a.sent();
+                        console.log("rows", rows);
                         string = JSON.stringify(rows);
-                        admin = JSON.parse(string)[0];
-                        if (!admin) return [3 /*break*/, 3];
-                        return [4 /*yield*/, bcrypt.compare(req.body.password, admin.password)];
+                        console.log("2", string);
+                        adminDB = JSON.parse(string)[0];
+                        console.log("3", adminDB);
+                        if (!adminDB) return [3 /*break*/, 3];
+                        console.log("ASDASD", adminDB);
+                        return [4 /*yield*/, bcrypt.compare(req.body.password, adminDB.password)];
                     case 2:
                         access = _a.sent();
-                        if (req.body.username === admin.username && access) {
+                        console.log("access", access);
+                        if (req.body.username === adminDB.username && access) {
                             return [2 /*return*/, res.status(200).json({
-                                    id: admin.id,
-                                    login: admin.username,
-                                    token: jwt.sign({ id: admin.id }, tokenKey, { expiresIn: "1h" })
+                                    id: adminDB.id,
+                                    login: adminDB.username,
+                                    token: jwt.sign({ id: adminDB.id }, config_1.tokenKey, { expiresIn: "1h" })
                                 })];
                         }
                         _a.label = 3;
-                    case 3: return [2 /*return*/, res.status(404).json({ message: "Неправильный логин / пароль" })];
+                    case 3: return [2 /*return*/, res.status(401).json({ message: "Неправильный логин / пароль" })];
                     case 4:
-                        e_8 = _a.sent();
-                        console.log(e_8);
-                        res.send(e_8);
+                        e_1 = _a.sent();
+                        console.log(e_1);
+                        res.send(e_1);
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
                 }
@@ -676,7 +632,7 @@ function main() {
         app.post("/api/checkAuth", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 try {
-                    jwt.verify(req.body.token, tokenKey, function (err, decoded) {
+                    jwt.verify(req.body.token, config_1.tokenKey, function (err, decoded) {
                         if (err) {
                             return res.status(300).json({ message: "err" });
                         }
@@ -691,94 +647,89 @@ function main() {
                 return [2 /*return*/];
             });
         }); });
-        app.get("/api/items/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var rows, string, item, picture, e_9;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, pool_1.execute("SELECT * FROM items WHERE id = " + req.params.id)];
-                    case 1:
-                        rows = (_a.sent())[0];
-                        string = JSON.stringify(rows);
-                        item = JSON.parse(string)[0];
-                        item.price = item.price.replace(",", ".");
-                        item.price = item.price.replace(/\s+/g, "");
-                        if (item.image.length > 0) {
-                            picture = JSON.parse(item.image);
-                            item.picture = picture;
-                        }
-                        res.send(item);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        e_9 = _a.sent();
-                        console.log(e_9);
-                        res.send(e_9);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
-        app["delete"]("/api/items/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var id, authorization, decoded, e_10;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        id = ~~req.params.id;
-                        authorization = req.header("authorization");
-                        decoded = jwt.verify(authorization, tokenKey);
-                        if (!(decoded.id && decoded.iat)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, pool_1.execute("\n                    DELETE FROM items\n                    WHERE id = '" + id + "'\n                ")];
-                    case 1:
-                        _a.sent();
-                        res.send({ id: id });
-                        _a.label = 2;
-                    case 2: return [3 /*break*/, 4];
-                    case 3:
-                        e_10 = _a.sent();
-                        console.log(e_10);
-                        res.send(e_10);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        app.post("/api/items", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var name_4, price, kal, size, rating, description, picture, quantity, pictureString, authorization, decoded, rows, string, item, e_11;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        name_4 = req.body.name;
-                        price = req.body.price;
-                        kal = req.body.kal;
-                        size = req.body.kal;
-                        rating = req.body.rating;
-                        description = req.body.description;
-                        picture = req.body.picture;
-                        quantity = req.body.quantity;
-                        pictureString = JSON.stringify(picture);
-                        authorization = req.header("authorization");
-                        decoded = jwt.verify(authorization, tokenKey);
-                        if (!(decoded.id && decoded.iat)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, pool_1.execute("\n                INSERT INTO items (\n                    name,\n                    price,\n                    kal,\n                    size,\n                    rating,\n                    description,\n                    quantity,\n                    picture\n                )\n                VALUES (\n                    '" + name_4 + "',\n                    '" + price + "',\n                    '" + kal + "',\n                    '" + size + "',\n                    '" + rating + "',\n                    '" + description + "',\n                    '" + quantity + "',\n                    '" + pictureString + "'\n                )\n            ")];
-                    case 1:
-                        rows = (_a.sent())[0];
-                        string = JSON.stringify(rows);
-                        item = JSON.parse(string);
-                        res.send({ id: item.insertId });
-                        _a.label = 2;
-                    case 2: return [3 /*break*/, 4];
-                    case 3:
-                        e_11 = _a.sent();
-                        console.log(e_11);
-                        res.send(e_11);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
+        // app.get("/api/items/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const [rows] = await pool.execute(`SELECT * FROM items WHERE id = ${req.params.id}`);
+        // 		const string = JSON.stringify(rows);
+        // 		let item: IDBItem = JSON.parse(string)[0];
+        // 		item.price = item.price.replace(",", ".");
+        // 		item.price = item.price.replace(/\s+/g, "");
+        // 		if (item.image.length > 0) {
+        // 			let picture: IDBImage = JSON.parse(item.image);
+        // 			item.picture = picture;
+        // 		}
+        // 		res.send(item);
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.delete("/api/items/:id", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const id: number = ~~req.params.id;
+        // 		const authorization = req.header("authorization");
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		if (decoded.id && decoded.iat) {
+        // 			await pool.execute(
+        // 				`
+        //                 DELETE FROM items
+        //                 WHERE id = '${id}'
+        //             `
+        // 			);
+        // 			res.send({ id: id });
+        // 		}
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
+        // app.post("/api/items", async (req: Request, res: Response) => {
+        // 	try {
+        // 		const name: string = req.body.name;
+        // 		const price: string = req.body.price;
+        // 		const kal: string = req.body.kal;
+        // 		const size: string = req.body.kal;
+        // 		const rating: string = req.body.rating;
+        // 		const description: string = req.body.description;
+        // 		const picture: IDBImage = req.body.picture;
+        // 		const quantity: number = req.body.quantity;
+        // 		const pictureString: string = JSON.stringify(picture);
+        // 		const authorization = req.header("authorization");
+        // 		const decoded = jwt.verify(authorization, tokenKey);
+        // 		if (decoded.id && decoded.iat) {
+        // 			const [rows] = await pool.execute(
+        // 				`
+        //             INSERT INTO items (
+        //                 name,
+        //                 price,
+        //                 kal,
+        //                 size,
+        //                 rating,
+        //                 description,
+        //                 quantity,
+        //                 picture
+        //             )
+        //             VALUES (
+        //                 '${name}',
+        //                 '${price}',
+        //                 '${kal}',
+        //                 '${size}',
+        //                 '${rating}',
+        //                 '${description}',
+        //                 '${quantity}',
+        //                 '${pictureString}'
+        //             )
+        //         `
+        // 			);
+        // 			const string = JSON.stringify(rows);
+        // 			let item = JSON.parse(string);
+        // 			res.send({ id: item.insertId });
+        // 		}
+        // 	} catch (e) {
+        // 		console.log(e);
+        // 		res.send(e);
+        // 	}
+        // });
         app.get("/test", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var payload;
             return __generator(this, function (_a) {
