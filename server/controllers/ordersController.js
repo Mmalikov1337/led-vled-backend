@@ -46,7 +46,6 @@ var OrdersController = /** @class */ (function () {
             var basket, name_1, tel, email, cityAddress, houseNumber, houseOrApartment, postIndex, promo, instagram, comment, deliveryMethod, paymentMethod;
             return __generator(this, function (_a) {
                 try {
-                    console.log("req.body", req.body);
                     basket = req.body.basket;
                     name_1 = req.body.orderData.name;
                     tel = req.body.orderData.tel;
@@ -100,7 +99,6 @@ var OrdersController = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        console.log("app.get(\"/api/orders\"", req.path, req.query, req.params);
                         return [4 /*yield*/, ordersService_1["default"].getOrders(req.query, (_a = ~~req.params.id) !== null && _a !== void 0 ? _a : null)];
                     case 1:
                         _b = _c.sent(), total = _b.total, orders = _b.orders;
@@ -156,6 +154,35 @@ var OrdersController = /** @class */ (function () {
                         e_2 = _a.sent();
                         console.log(e_2);
                         res.send(e_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrdersController.prototype.deleteOrders = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, isDeleted, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = ~~req.params.id;
+                        if (!id) {
+                            throw ClientError_1["default"].badRequest("Wrong id");
+                        }
+                        return [4 /*yield*/, ordersService_1["default"].deleteOrders(id)];
+                    case 1:
+                        isDeleted = _a.sent();
+                        if (!isDeleted) {
+                            console.log("Order with id=" + id + " has not deleted.");
+                        }
+                        res.send({ id: id });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_3 = _a.sent();
+                        console.log(e_3);
+                        res.send(e_3);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

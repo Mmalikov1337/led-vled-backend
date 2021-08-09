@@ -9,5 +9,5 @@ ordersRouter.get("/", authorizationMW_1["default"](), ordersController_1["defaul
 ordersRouter.get("/:id", authorizationMW_1["default"](), ordersController_1["default"].getOrders);
 ordersRouter.post("/", authorizationMW_1["default"](), ordersController_1["default"].createOrder);
 ordersRouter.put("/:id", authorizationMW_1["default"](), ordersController_1["default"].editOrders);
-// ordersRouter.delete("/", getAuthorizationMW(), );
+ordersRouter["delete"]("/:id", authorizationMW_1["default"](), ordersController_1["default"].deleteOrders);
 exports["default"] = ordersRouter;

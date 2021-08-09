@@ -13,5 +13,5 @@ ordersRouter.get("/:id", getAuthorizationMW(), OrdersController.getOrders);
 ordersRouter.post("/", getAuthorizationMW(), OrdersController.createOrder);
 
 ordersRouter.put("/:id", getAuthorizationMW(), OrdersController.editOrders);
-// ordersRouter.delete("/", getAuthorizationMW(), );
+ordersRouter.delete("/:id", getAuthorizationMW(),OrdersController.deleteOrders );
 export default ordersRouter;

@@ -106,11 +106,11 @@ var Database = /** @class */ (function () {
     // totalPrice: string,
     id) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.pool.execute("UPDATE orders SET " +
                                 "name = ? , " +
                                 "tel = ? , " +
@@ -146,10 +146,31 @@ var Database = /** @class */ (function () {
                                 id,
                             ])];
                     case 1:
-                        _b.sent();
+                        _a.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        _a = _b.sent();
+                        e_3 = _a.sent();
+                        console.log("Database error. editOrders", e_3.message, e_3.type);
+                        throw ServerError_1["default"].internalError("Database error.");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.deleteOrders = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var rows, e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.execute("DELETE FROM orders	WHERE id = ?", [id])];
+                    case 1:
+                        rows = (_a.sent())[0];
+                        console.log(">>>", rows, rows.affectedRows > 0, "<<<");
+                        return [2 /*return*/, rows.affectedRows > 0]; // rows.affectedRows > 0 => true => успешно;
+                    case 2:
+                        e_4 = _a.sent();
                         throw ServerError_1["default"].internalError("Database error.");
                     case 3: return [2 /*return*/];
                 }
@@ -158,7 +179,7 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.getItems = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var rows, rows, e_3;
+            var rows, rows, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -174,7 +195,7 @@ var Database = /** @class */ (function () {
                         return [2 /*return*/, rows];
                     case 4: return [3 /*break*/, 6];
                     case 5:
-                        e_3 = _a.sent();
+                        e_5 = _a.sent();
                         console.log("Database error. getOrders");
                         throw ServerError_1["default"].internalError("Database error.");
                     case 6: return [2 /*return*/];
@@ -184,7 +205,7 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.executeAny = function (command) {
         return __awaiter(this, void 0, void 0, function () {
-            var rows, e_4;
+            var rows, e_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -194,7 +215,7 @@ var Database = /** @class */ (function () {
                         rows = (_a.sent())[0];
                         return [2 /*return*/, rows];
                     case 2:
-                        e_4 = _a.sent();
+                        e_6 = _a.sent();
                         throw ServerError_1["default"].internalError("Database error.");
                     case 3: return [2 /*return*/];
                 }

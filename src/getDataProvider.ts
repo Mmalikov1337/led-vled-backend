@@ -34,13 +34,16 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 				_order: order,
 				_start: (page - 1) * perPage,
 				_end: page * perPage,
-				_token: localStorage.getItem("token"),
 			};
 			const url = `${apiUrl}/${resource}?${stringify(query)}`;
-			// console.log("url", url);
-			// console.log("query", query, "\n-<<<");
 
-			return httpClient(url).then(({ headers, json }) => {
+			return httpClient(url, {
+				method: "GET",
+				user: {
+					authenticated: true,
+					token: localStorage.getItem("token"),
+				},
+			}).then(({ headers, json }) => {
 				console.log("getList__httpClient", headers, json);
 
 				if (!headers.has("x-total-count")) {
@@ -59,20 +62,26 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 			console.log("getOne_________________", resource, params);
 
 			if (resource == "orders") {
-				let query = {
-					_token: localStorage.getItem("token"),
-				};
-				return httpClient(`${apiUrl}/${resource}/${params.id}?${stringify(query)}`).then(
-					({ json }) => {
-						console.log("getOne__httpClient", json);
+				return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+					method: "GET",
+					user: {
+						authenticated: true,
+						token: localStorage.getItem("token"),
+					},
+				}).then(({ json }) => {
+					console.log("getOne__httpClient", json);
 
-						return {
-							data: json,
-						};
-					}
-				);
+					return {
+						data: json,
+					};
+				});
 			} else {
-				return httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
+				return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+					user: {
+						authenticated: true,
+						token: localStorage.getItem("token"),
+					},
+				}).then(({ json }) => ({
 					data: json,
 				}));
 			}
@@ -86,7 +95,13 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 			};
 			const url = `${apiUrl}/${resource}?${stringify(query)}`;
 			if (resource == "orders") {
-				return httpClient(url).then(({ json }) => ({
+				return httpClient(url, {
+					method: "GET",
+					user: {
+						authenticated: true,
+						token: localStorage.getItem("token"),
+					},
+				}).then(({ json }) => ({
 					data: json,
 					user: {
 						authenticated: true,
@@ -94,7 +109,13 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 					},
 				}));
 			} else {
-				return httpClient(url).then(({ json }) => ({ data: json }));
+				return httpClient(url, {
+					method: "GET",
+					user: {
+						authenticated: true,
+						token: localStorage.getItem("token"),
+					},
+				}).then(({ json }) => ({ data: json }));
 			}
 		},
 
@@ -113,7 +134,13 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 			};
 			const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-			return httpClient(url).then(({ headers, json }) => {
+			return httpClient(url, {
+				method: "GET",
+				user: {
+					authenticated: true,
+					token: localStorage.getItem("token"),
+				},
+			}).then(({ headers, json }) => {
 				if (!headers.has("x-total-count")) {
 					throw new Error(
 						"The X-Total-Count header is missing in the HTTP Response. The jsonServer Data Provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?"

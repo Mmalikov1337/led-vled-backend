@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-import { Pool, RowDataPacket } from "mysql2/promise";
+import { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { urlToConnect, s_login, dbName, s_password } from "./config";
 import { IBasket, OrderStatus, PaymentMethod } from "./types";
 import ServerError from "./Errors/ServerError";
@@ -156,10 +156,25 @@ class Database {
 					id,
 				]
 			);
-		} catch {
+		} catch(e) {
+			console.log("Database error. editOrders", e.message, e.type);
 			throw ServerError.internalError("Database error.");
 		}
 	}
+
+	async deleteOrders(id: number): Promise<boolean> {
+		try {
+			const [rows]: [ResultSetHeader, any] = await this.pool.execute(
+				"DELETE FROM orders	WHERE id = ?",
+				[id]
+			);
+			console.log(">>>", rows, rows.affectedRows > 0, "<<<");
+			return rows.affectedRows > 0; // rows.affectedRows > 0 => true => успешно;
+		} catch (e) {
+			throw ServerError.internalError("Database error.");
+		}
+	}
+
 	async getItems(id?: number) {
 		try {
 			if (id) {

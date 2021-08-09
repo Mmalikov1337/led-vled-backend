@@ -5,7 +5,7 @@ import ClientError from "./../Errors/ClientError";
 class OrdersController {
 	async createOrder(req: Request, res: Response, next: NextFunction) {
 		try {
-			console.log("req.body", req.body);
+			// console.log("req.body", req.body);
 			const basket: Array<IBasket> = req.body.basket;
 			/* ORDERDATA */
 			const name: string = req.body.orderData.name; // customer name : String
@@ -60,7 +60,7 @@ class OrdersController {
 	}
 	async getOrders(req: Request, res: Response, next: NextFunction) {
 		try {
-			console.log(`app.get("/api/orders"`, req.path, req.query, req.params);
+			// console.log(`app.get("/api/orders"`, req.path, req.query, req.params);
 			const { total, orders } = await OrdersService.getOrders(req.query, ~~req.params.id ?? null);
 
 			res.setHeader("X-Total-Count", total.toString());
@@ -119,6 +119,24 @@ class OrdersController {
 			console.log(e);
 			res.send(e);
 		}
+	}
+	async deleteOrders(req: Request, res: Response, next: NextFunction) {
+		// app.delete("/api/orders/:id", async (req: Request, res: Response) => {
+		try {
+			const id = ~~req.params.id;
+			if (!id) {
+				throw ClientError.badRequest("Wrong id");
+			}
+			const isDeleted = await OrdersService.deleteOrders(id);
+			if(!isDeleted){
+				console.log(`Order with id=${id} has not deleted.`)
+			}
+			res.send({ id: id });
+		} catch (e) {
+			console.log(e);
+			res.send(e);
+		}
+		// });
 	}
 	// async getOrder(req: Request, res: Response, next: NextFunction) {
 	// 	try {

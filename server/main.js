@@ -87,10 +87,19 @@ bcrypt.genSalt(saltRounds, function (err, salt) {
 });
 function main() {
     var _this = this;
+    // $2b$07$Y5jENivC8lJLc5tqJ67B9OqZuv13s/ouioOfB0ogcEJI5L2sLGeF.
     try {
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(cors());
+        app.use(function (req, res, next) {
+            console.log(req.path, req.method, {
+                "req.params": req.params,
+                "req.query": req.query,
+                "req.body": req.body
+            }, { "req.headers.authorization": req.headers.authorization });
+            return next();
+        });
         app.use("/api/orders", orders_1["default"]);
         // app.post("/api/orders", async (req, res, next) => {
         // 	try {
@@ -588,7 +597,7 @@ function main() {
         // 	}
         // });
         app.post("/api/authenticate", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var rows, string, adminDB, access, e_1;
+            var rows, string, adminDB, jwtToken, access, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -605,6 +614,8 @@ function main() {
                         console.log("2", string);
                         adminDB = JSON.parse(string)[0];
                         console.log("3", adminDB);
+                        jwtToken = jwt.sign({ id: adminDB.id }, config_1.tokenKey, { expiresIn: "1h" });
+                        console.log("token", jwtToken);
                         if (!adminDB) return [3 /*break*/, 3];
                         console.log("ASDASD", adminDB);
                         return [4 /*yield*/, bcrypt.compare(req.body.password, adminDB.password)];
@@ -615,7 +626,7 @@ function main() {
                             return [2 /*return*/, res.status(200).json({
                                     id: adminDB.id,
                                     login: adminDB.username,
-                                    token: jwt.sign({ id: adminDB.id }, config_1.tokenKey, { expiresIn: "1h" })
+                                    token: jwtToken
                                 })];
                         }
                         _a.label = 3;

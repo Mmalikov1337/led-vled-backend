@@ -8,9 +8,12 @@ interface RequestExtended extends Request {
 const getAuthorizationMW = () => {
 	return (req: RequestExtended, res: Response, next: NextFunction) => {
 		try {
-			const authorization = (req as Request).query._token as string;
+			// const authorization = (req as Request).query._token as string;
+			const authorization = (req as Request).headers.authorization;
 			if (!authorization) {
-				ClientError.notAuthorizated("Wrong token.");
+				console.log("AUTH TOKEN:", authorization);
+				
+				throw ClientError.notAuthorizated("Wrong token.");
 			}
 			const decoded = jwt.verify(authorization, tokenKey);
 			if (!decoded) return;

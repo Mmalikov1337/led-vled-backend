@@ -255,5 +255,13 @@ class OrdersService {
 			id
 		);
 	}
+
+	async deleteOrders(id: number) {
+		try {
+			return await Database.deleteOrders(id);
+		} catch (e) {
+			throw e;
+		}
+	}
 }
 export default new OrdersService();

@@ -274,6 +274,23 @@ var OrdersService = /** @class */ (function () {
             });
         });
     };
+    OrdersService.prototype.deleteOrders = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Database_1["default"].deleteOrders(id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        e_1 = _a.sent();
+                        throw e_1;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return OrdersService;
 }());
 exports["default"] = new OrdersService();

@@ -6,9 +6,11 @@ var ClientError_1 = require("./../Errors/ClientError");
 var getAuthorizationMW = function () {
     return function (req, res, next) {
         try {
-            var authorization = req.query._token;
+            // const authorization = (req as Request).query._token as string;
+            var authorization = req.headers.authorization;
             if (!authorization) {
-                ClientError_1["default"].notAuthorizated("Wrong token.");
+                console.log("AUTH TOKEN:", authorization);
+                throw ClientError_1["default"].notAuthorizated("Wrong token.");
             }
             var decoded = jwt.verify(authorization, config_1.tokenKey);
             if (!decoded)
