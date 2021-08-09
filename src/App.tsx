@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Admin, Resource } from "react-admin";
-import getProvider from "./DataProvider";
+import getProvider from "./getDataProvider";
 import getAuthProvider from "./AuthProvider";
 import { OrderEdit, OrderList } from "./Orders";
 import items from "./Items"
