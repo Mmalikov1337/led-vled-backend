@@ -5,6 +5,9 @@
         "name": "Sgoldik",
         "url": "https://github.com/sgoldik"
     },
+    "engines": {
+        "node": "14.x"
+    },
     "scripts": {
         "start": "tsc server.ts  && node server.js",
         "dev": "ts-node-dev --respawn server/main.ts",
