@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import ordersService from "./../services/ordersService";
+import OrdersService from "./../services/ordersService";
 import { IBasket, IDBItem, IDBOrder, IQuery, OrderStatus, PaymentMethod } from "./../types";
 import ClientError from "./../Errors/ClientError";
 class OrdersController {
@@ -33,7 +33,7 @@ class OrdersController {
 			if (!postIndex) throw ClientError.badRequest(`postalCode not found`);
 			if (!deliveryMethod) throw ClientError.badRequest(`deliveryMethod not found`);
 
-			ordersService.createOrder(
+			OrdersService.createOrder(
 				basket,
 				name,
 				tel,
@@ -61,7 +61,7 @@ class OrdersController {
 	async getOrders(req: Request, res: Response, next: NextFunction) {
 		try {
 			console.log(`app.get("/api/orders"`, req.path, req.query, req.params);
-			const { total, orders } = await ordersService.getOrders(req.query, ~~req.params.id ?? null);
+			const { total, orders } = await OrdersService.getOrders(req.query, ~~req.params.id ?? null);
 
 			res.setHeader("X-Total-Count", total.toString());
 			res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
@@ -72,6 +72,52 @@ class OrdersController {
 		} catch (e) {
 			// console.log(e);
 			next(e);
+		}
+	}
+	async editOrders(req: Request, res: Response, next: NextFunction) {
+		try {
+			const id: number = ~~req.params.id;
+			const name: string = req.body.name;
+			const tel: string = req.body.tel;
+			const email: string = req.body.email;
+			const cityAddress: string = req.body.cityAddress;
+			const houseNumber: string = req.body.houseNumber;
+			const houseOrApartment: boolean = req.body.houseOrApartment;
+			const postalCode: string = req.body.postalCode;
+			const promo: string = req.body.promo;
+			const instagram: string = req.body.instagram;
+			const comment: string = req.body.comment;
+			const deliveryMethod: string = req.body.deliveryMethod;
+			const status: OrderStatus = req.body.status;
+			const uid: string = req.body.uid;
+			const date: Date = new Date(req.body.date);
+			const confirmation_url: string = req.body.confirmation_url;
+			// const totalPrice: string = req.body.totalPrice;
+
+			await OrdersService.editOrders(
+				name,
+				tel,
+				email,
+				cityAddress,
+				houseNumber,
+				houseOrApartment,
+				postalCode,
+				promo,
+				instagram,
+				comment,
+				deliveryMethod,
+				status,
+				uid,
+				date,
+				confirmation_url,
+				id
+			);
+
+			res.status(200);
+			return res.send({ id: id });
+		} catch (e) {
+			console.log(e);
+			res.send(e);
 		}
 	}
 	// async getOrder(req: Request, res: Response, next: NextFunction) {

@@ -1,4 +1,5 @@
 import { RowDataPacket } from "mysql2";
+import ClientError from "./../Errors/ClientError";
 import Database from "./../Database";
 import { IBasket, PaymentMethod, OrderStatus, IDBOrder, IQuery } from "./../types";
 
@@ -42,7 +43,7 @@ class OrdersService {
 			// throw createError(400, `Payment method '${paymentMethod}' not found`);
 		}
 	}
-	async getOrders(query: any, id?:number) {
+	async getOrders(query: any, id?: number) {
 		// if(id)
 		const dbItems = await Database.getItems();
 		const dbOrders = await Database.getOrders(id ?? null);
@@ -183,7 +184,8 @@ class OrdersService {
 				console.log("Filter error search_id.", e.message, e.type);
 			}
 		}
-		let slicedOrders = (query._start || query._end) ? orders.slice(~~query._start, ~~query._end) : orders
+		let slicedOrders =
+			query._start || query._end ? orders.slice(~~query._start, ~~query._end) : orders;
 
 		if (query._sort && query._order) {
 			if (query._sort == "date") {
@@ -209,6 +211,49 @@ class OrdersService {
 			total,
 			orders: slicedOrders,
 		};
+	}
+
+	async editOrders(
+		name: string,
+		tel: string,
+		email: string,
+		cityAddress: string,
+		houseNumber: string,
+		houseOrApartment: boolean,
+		postalCode: string,
+		promo: string,
+		instagram: string,
+		comment: string,
+		deliveryMethod: string,
+		status: OrderStatus,
+		uid: string,
+		date: Date,
+		confirmation_url: string,
+		// totalPrice: string,
+		id: number
+	) {
+		const dbOrders = await Database.getOrders(id);
+		if (!dbOrders[0].id) {
+			throw ClientError.badRequest(`Order with id=${id} not found`);
+		}
+		await Database.editOrders(
+			name,
+			tel,
+			email,
+			cityAddress,
+			houseNumber,
+			houseOrApartment,
+			postalCode,
+			promo,
+			instagram,
+			comment,
+			deliveryMethod,
+			status,
+			uid,
+			date,
+			confirmation_url,
+			id
+		);
 	}
 }
 export default new OrdersService();

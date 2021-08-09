@@ -99,10 +99,74 @@ class Database {
 			throw ServerError.internalError("Database error.");
 		}
 	}
+	async editOrders(
+		name: string,
+		tel: string,
+		email: string,
+		cityAddress: string,
+		houseNumber: string,
+		houseOrApartment: boolean,
+		postalCode: string,
+		promo: string,
+		instagram: string,
+		comment: string,
+		deliveryMethod: string,
+		status: OrderStatus,
+		uid: string,
+		date: Date,
+		confirmation_url: string,
+		// totalPrice: string,
+		id: number
+	) {
+		try {
+			await this.pool.execute(
+				"UPDATE orders SET " +
+					"name = ? , " +
+					"tel = ? , " +
+					"email = ? , " +
+					"cityAddress = ? , " +
+					"houseNumber = ? , " +
+					"houseOrApartment = ? , " +
+					"postalCode = ? , " +
+					"promo = ? , " +
+					"instagram = ? , " +
+					"comment = ? , " +
+					"deliveryMethod = ? , " +
+					"status = ? , " +
+					"uid = ? , " +
+					"date = ? , " +
+					"confirmation_url = ? " +
+					"WHERE id = ?",
+				[
+					name,
+					tel,
+					email,
+					cityAddress,
+					houseNumber,
+					houseOrApartment,
+					postalCode,
+					promo,
+					instagram,
+					comment,
+					deliveryMethod,
+					status,
+					uid,
+					date,
+					confirmation_url,
+					id,
+				]
+			);
+		} catch {
+			throw ServerError.internalError("Database error.");
+		}
+	}
 	async getItems(id?: number) {
 		try {
 			if (id) {
-				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items WHERE id = ?`, [id]);
+				const [rows]: [RowDataPacket[], any] = await this.pool.execute(
+					`SELECT * FROM items WHERE id = ?`,
+					[id]
+				);
 				return rows;
 			} else {
 				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items`);
