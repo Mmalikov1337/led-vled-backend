@@ -8,7 +8,7 @@ interface RequestExtended extends Request {
 const getAuthorizationMW = () => {
 	return (req: RequestExtended, res: Response, next: NextFunction) => {
 		try {
-			const authorization = req.query._token as string;
+			const authorization = (req as Request).query._token as string;
 			if (!authorization) {
 				ClientError.notAuthorizated("Wrong token.");
 			}
