@@ -6,7 +6,8 @@
         "url": "https://github.com/sgoldik"
     },
     "engines": {
-        "node": "14.x"
+        "node": "14.x",
+        "yarn":"1.x"
     },
     "scripts": {
         "start": "tsc server.ts  && node server.js",
@@ -90,6 +91,7 @@
         "universal-cookie": "^4.0.3",
         "uuid": "^8.3.1",
         "ws": "^7.1.1",
+        "typescript": "^4.3.5",
         "yarn": "^1.22.0"
     },
     "devDependencies": {
@@ -109,7 +111,6 @@
         "ts-loader": "^6.2.1",
         "ts-node": "^10.1.0",
         "ts-node-dev": "^1.1.8",
-        "typescript": "^3.6.4",
         "webpack": "^4.17.2",
         "webpack-cli": "^3.1.0"
     }
