@@ -18,5 +18,10 @@
     // "strictBindCallApply": true,             
     // "strictPropertyInitialization": true,    
     // "alwaysStrict": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src"
+  ]
 }

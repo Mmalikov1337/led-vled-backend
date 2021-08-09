@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { NextFunction, Response, Request } from "express";
 class ItemsController {
 	async getItems(req: Request, res: Response, next: NextFunction) {// "/"
