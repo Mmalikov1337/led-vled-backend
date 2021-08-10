@@ -25,7 +25,7 @@ export const ItemEdit = (props) => (
             </FormTab>
             <FormTab label="Описание">
                 <TextInput fullWidth label="Описание" source="description" addLabel={false} />
-                <ImageInput source="picture" label="Изображение" accept="image/*">
+                <ImageInput source="image" label="Изображение" accept="image/*">
                     <ImageField source="src" title="title" />
                 </ImageInput>
             </FormTab>

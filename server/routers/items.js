@@ -6,4 +6,6 @@ var itemsController_1 = require("./../controllers/itemsController");
 var itemsRouter = express.Router();
 itemsRouter.get("/", authorizationMW_1["default"](), itemsController_1["default"].getItems);
 itemsRouter.get("/:id", authorizationMW_1["default"](), itemsController_1["default"].getItems);
+itemsRouter.put("/:id", authorizationMW_1["default"](), itemsController_1["default"].editItems);
+itemsRouter["delete"]("/:id", authorizationMW_1["default"](), itemsController_1["default"].deleteItems);
 exports["default"] = itemsRouter;

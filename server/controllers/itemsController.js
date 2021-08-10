@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var itemsService_1 = require("./../services/itemsService");
+var ClientError_1 = require("./../Errors/ClientError");
 var ItemsController = /** @class */ (function () {
     function ItemsController() {
     }
@@ -62,6 +63,70 @@ var ItemsController = /** @class */ (function () {
                     case 2:
                         e_1 = _c.sent();
                         next(e_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ItemsController.prototype.editItems = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, name_1, price, kal, size, rating, description, image, quantity, total, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = ~~req.params.id;
+                        name_1 = req.body.name;
+                        price = req.body.price;
+                        kal = req.body.kal;
+                        size = req.body.kal;
+                        rating = req.body.rating;
+                        description = req.body.description;
+                        image = req.body.image;
+                        quantity = req.body.quantity;
+                        // if (decoded.id && decoded.iat) {
+                        return [4 /*yield*/, itemsService_1["default"].editItems(name_1, price, kal, size, rating, description, image, quantity, id)];
+                    case 1:
+                        // if (decoded.id && decoded.iat) {
+                        _a.sent();
+                        total = 1;
+                        // res.setHeader("X-Total-Count", total.toString());
+                        // res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+                        res.status(200);
+                        res.json({ id: id });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2);
+                        res.send(e_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ItemsController.prototype.deleteItems = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, isDeleted, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = ~~req.params.id;
+                        if (!id) {
+                            throw ClientError_1["default"].badRequest("Wrong id");
+                        }
+                        return [4 /*yield*/, itemsService_1["default"].deleteItems(id)];
+                    case 1:
+                        isDeleted = _a.sent();
+                        if (!isDeleted) {
+                            console.log("Item with id=" + id + " has not deleted.");
+                        }
+                        res.send({ id: id });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_3 = _a.sent();
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

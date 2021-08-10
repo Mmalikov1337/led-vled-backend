@@ -42,16 +42,59 @@ var ItemsService = /** @class */ (function () {
     }
     ItemsService.prototype.getItems = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var items;
+            var items, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Database_1["default"].getItems(id)];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Database_1["default"].getItems(id)];
                     case 1:
                         items = _a.sent();
                         return [2 /*return*/, {
                                 total: items.length,
                                 items: items
                             }];
+                    case 2:
+                        e_1 = _a.sent();
+                        throw e_1;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ItemsService.prototype.editItems = function (name, price, kal, size, rating, description, image, quantity, id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Database_1["default"].editItems(name, price, kal, size, rating, description, quantity, image, id)];
+                    case 1: 
+                    // const imageString: string = JSON.stringify(image);
+                    // console.log("imageString",imageString);
+                    return [2 /*return*/, _a.sent()];
+                    case 2:
+                        e_2 = _a.sent();
+                        throw e_2;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ItemsService.prototype.deleteItems = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Database_1["default"].deleteItems(id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        e_3 = _a.sent();
+                        throw e_3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });

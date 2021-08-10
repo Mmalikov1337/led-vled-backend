@@ -102,9 +102,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Database.prototype.editOrders = function (name, tel, email, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status, uid, date, confirmation_url, 
-    // totalPrice: string,
-    id) {
+    Database.prototype.editOrders = function (name, tel, email, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status, uid, date, confirmation_url, id) {
         return __awaiter(this, void 0, void 0, function () {
             var e_3;
             return __generator(this, function (_a) {
@@ -167,7 +165,6 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.execute("DELETE FROM orders	WHERE id = ?", [id])];
                     case 1:
                         rows = (_a.sent())[0];
-                        // console.log(">>>", rows, rows.affectedRows > 0, "<<<");
                         return [2 /*return*/, rows.affectedRows > 0]; // rows.affectedRows > 0 => true => успешно;
                     case 2:
                         e_4 = _a.sent();
@@ -203,9 +200,39 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Database.prototype.executeAny = function (command) {
+    Database.prototype.editItems = function (name, price, kal, size, rating, description, quantity, image, id) {
         return __awaiter(this, void 0, void 0, function () {
             var rows, e_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.execute("UPDATE items SET " +
+                                "name = ? , " +
+                                "price = ? , " +
+                                "kal = ? , " +
+                                "size = ? , " +
+                                "rating = ? , " +
+                                "description = ? , " +
+                                "quantity = ? , " +
+                                "image = ?  " +
+                                "WHERE id = ?", [name, price, kal, size, rating, description, quantity, image, id])];
+                    case 1:
+                        rows = (_a.sent())[0];
+                        console.log("rows.affectedRows>>", rows.affectedRows);
+                        return [2 /*return*/, rows.affectedRows > 0];
+                    case 2:
+                        e_6 = _a.sent();
+                        console.log("Database error. editItems", e_6.message, e_6.type);
+                        throw ServerError_1["default"].internalError("Database error.");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.executeAny = function (command) {
+        return __awaiter(this, void 0, void 0, function () {
+            var rows, e_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -215,7 +242,26 @@ var Database = /** @class */ (function () {
                         rows = (_a.sent())[0];
                         return [2 /*return*/, rows];
                     case 2:
-                        e_6 = _a.sent();
+                        e_7 = _a.sent();
+                        throw ServerError_1["default"].internalError("Database error.");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.deleteItems = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var rows, e_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.execute("DELETE FROM items	WHERE id = ?", [id])];
+                    case 1:
+                        rows = (_a.sent())[0];
+                        return [2 /*return*/, rows.affectedRows > 0]; // rows.affectedRows > 0 => true => успешно;
+                    case 2:
+                        e_8 = _a.sent();
                         throw ServerError_1["default"].internalError("Database error.");
                     case 3: return [2 /*return*/];
                 }

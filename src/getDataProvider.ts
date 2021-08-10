@@ -155,40 +155,41 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 
 		update: async (resource, params) => {
 			console.log("update_________________", resource, params);
-
+			params.previousData.image = JSON.parse(params.previousData.image)
+			params.data.image = JSON.parse(params.data.image)
 			if (resource == "items" || resource == "categories") {
-				if (params.previousData.picture) {
-					console.log("params.previousData.picture");
-					console.log(params.data.picture);
-					if (params.data.picture) {
-						console.log("params.data.picture");
-						if (params.data.picture.src != params.previousData.picture.src) {
-							console.log("params.data.picture.src != params.previousData.picture.src");
+				if (params.previousData.image) {
+					console.log("params.previousData.image");
+					console.log("params.data.image",params.data.image, typeof params.data.image);
+					if (params.data.image) {
+						console.log("params.data.image>>>>>",params.data.image.src);
+						if (params.data.image.src != params.previousData.image.src) {
+							console.log("params.data.image.src != params.previousData.image.src");
 							//if (params.data.pucture != undefined) {
-							let ref = storageRef.child(params.data.picture.rawFile.path);
-							let uploadTask: any = await ref.put(params.data.picture.rawFile);
+							let ref = storageRef.child(params.data.image.rawFile.path);
+							let uploadTask: any = await ref.put(params.data.image.rawFile);
 							// uploadTask = await uploadTask.on('state_changed')
 							let download = await ref.getDownloadURL();
-							params.data.picture.src = download;
+							params.data.image.src = download;
 							console.log(download);
 						} else {
-							console.log("params.data.picture.src == params.previousData.picture.src");
+							console.log("params.data.image.src == params.previousData.image.src");
 						}
 					} else {
-						console.log("!params.data.picture");
-						params.data.picture = "";
+						console.log("!params.data.image");
+						params.data.image = "";
 					}
 				} else {
-					console.log("!params.previousData.picture");
-					if (params.data.picture.src) {
-						console.log("!params.previousData.picture params.data.picture.src");
+					console.log("!params.previousData.image");
+					if (params.data.image.src) {
+						console.log("!params.previousData.image params.data.image.src");
 						console.log(params);
 						console.log("src none");
-						let ref = storageRef.child(params.data.picture.rawFile.path);
-						let uploadTask: any = await ref.put(params.data.picture.rawFile);
+						let ref = storageRef.child(params.data.image.rawFile.path);
+						let uploadTask: any = await ref.put(params.data.image.rawFile);
 						// uploadTask = await uploadTask.on('state_changed')
 						let download = await ref.getDownloadURL();
-						params.data.picture.src = download;
+						params.data.image.src = download;
 						console.log(download);
 					}
 				}

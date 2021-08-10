@@ -37,7 +37,7 @@ const ItemsGrid: FC = (props) => {
 				<Grid key={id} xs={12} sm={6} md={4} lg={3} xl={2} item>
 					<Card>
 						<CardMedia
-							image={typeof JSON.parse(data[id].image) == "object" ? JSON.parse(data[id].image).src : ""}
+							image={data[id].image ? JSON.parse(data[id].image).src : ""}
 							className={classes.media}
 							onClick={() => {
 								console.log(data[id], data, "<<<");

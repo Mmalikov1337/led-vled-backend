@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 import { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { urlToConnect, s_login, dbName, s_password } from "./config";
-import { IBasket, OrderStatus, PaymentMethod } from "./types";
+import { IBasket, IDBImage, OrderStatus } from "./types";
 import ServerError from "./Errors/ServerError";
 class Database {
 	private pool: Pool;
@@ -115,7 +115,6 @@ class Database {
 		uid: string,
 		date: Date,
 		confirmation_url: string,
-		// totalPrice: string,
 		id: number
 	) {
 		try {
@@ -156,7 +155,7 @@ class Database {
 					id,
 				]
 			);
-		} catch(e) {
+		} catch (e) {
 			console.log("Database error. editOrders", e.message, e.type);
 			throw ServerError.internalError("Database error.");
 		}
@@ -168,7 +167,6 @@ class Database {
 				"DELETE FROM orders	WHERE id = ?",
 				[id]
 			);
-			// console.log(">>>", rows, rows.affectedRows > 0, "<<<");
 			return rows.affectedRows > 0; // rows.affectedRows > 0 => true => успешно;
 		} catch (e) {
 			throw ServerError.internalError("Database error.");
@@ -184,7 +182,7 @@ class Database {
 				);
 				return rows;
 			} else {
-				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items`);			
+				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items`);
 				return rows;
 			}
 		} catch (e) {
@@ -192,10 +190,57 @@ class Database {
 			throw ServerError.internalError("Database error.");
 		}
 	}
+
+	async editItems(
+		name: string,
+		price: string,
+		kal: string,
+		size: string,
+		rating: string,
+		description: string,
+		quantity: number,
+		image: IDBImage,
+		id: number
+	) {
+		try {
+			const [rows]: [ResultSetHeader, any] = await this.pool.execute(
+				"UPDATE items SET " +
+					"name = ? , " +
+					"price = ? , " +
+					"kal = ? , " +
+					"size = ? , " +
+					"rating = ? , " +
+					"description = ? , " +
+					"quantity = ? , " +
+					"image = ?  " +
+					"WHERE id = ?",
+				[name, price, kal, size, rating, description, quantity, image, id]
+			);
+			console.log("rows.affectedRows>>", rows.affectedRows);
+
+			return rows.affectedRows > 0;
+		} catch (e) {
+			console.log("Database error. editItems", e.message, e.type);
+			throw ServerError.internalError("Database error.");
+		}
+	}
+
 	async executeAny(command: string) {
 		try {
 			const [rows] = await this.pool.execute(command);
 			return rows;
+		} catch (e) {
+			throw ServerError.internalError("Database error.");
+		}
+	}
+
+	async deleteItems(id: number): Promise<boolean> {
+		try {
+			const [rows]: [ResultSetHeader, any] = await this.pool.execute(
+				"DELETE FROM items	WHERE id = ?",
+				[id]
+			);
+			return rows.affectedRows > 0; // rows.affectedRows > 0 => true => успешно;
 		} catch (e) {
 			throw ServerError.internalError("Database error.");
 		}

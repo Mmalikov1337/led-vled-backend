@@ -5,5 +5,7 @@ const itemsRouter = express.Router();
 
 itemsRouter.get("/", getAuthorizationMW(), ItemsContrtoller.getItems);
 itemsRouter.get("/:id", getAuthorizationMW(), ItemsContrtoller.getItems);
+itemsRouter.put("/:id", getAuthorizationMW(), ItemsContrtoller.editItems);
+itemsRouter.delete("/:id", getAuthorizationMW(), ItemsContrtoller.deleteItems);
 
 export default itemsRouter;
