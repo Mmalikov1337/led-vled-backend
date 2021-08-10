@@ -188,12 +188,10 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.execute("SELECT * FROM items WHERE id = ?", [id])];
                     case 1:
                         rows = (_a.sent())[0];
-                        console.log(rows);
                         return [2 /*return*/, rows];
                     case 2: return [4 /*yield*/, this.pool.execute("SELECT * FROM items")];
                     case 3:
                         rows = (_a.sent())[0];
-                        console.log(rows);
                         return [2 /*return*/, rows];
                     case 4: return [3 /*break*/, 6];
                     case 5:

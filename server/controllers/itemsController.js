@@ -61,7 +61,6 @@ var ItemsController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         e_1 = _c.sent();
-                        // console.log(e);
                         next(e_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
