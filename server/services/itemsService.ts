@@ -15,15 +15,15 @@ class ItemsService {
 	}
 
 	async editItems(
-		name: string,
-		price: string,
-		kal: string,
-		size: string,
-		rating: string,
-		description: string,
-		image: IDBImage,
-		quantity: number,
-		id: number
+		name: string | null, 
+		price: string | null, 
+		kal: string | null, 
+		size: string | null, 
+		rating: string | null, 
+		description: string | null, 
+		image: IDBImage | null, 
+		quantity: number | null, 
+		id: number | null 
 	) {
 		try {
 			// const imageString: string = JSON.stringify(image);
@@ -48,6 +48,32 @@ class ItemsService {
 	async deleteItems(id: number) {
 		try {
 			return await Database.deleteItems(id);
+		} catch (e) {
+			throw e;
+		}
+	}
+
+	async createItems(
+		name: string | null,
+		price: string | null,
+		kal: string | null,
+		size: string | null,
+		rating: string | null,
+		description: string | null,
+		image: IDBImage | null,
+		quantity: number | null
+	) {
+		try {
+			return await Database.insertItems(
+				name,
+				price,
+				kal,
+				size,
+				rating,
+				description,
+				image,
+				quantity
+			);
 		} catch (e) {
 			throw e;
 		}

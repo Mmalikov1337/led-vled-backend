@@ -19,15 +19,15 @@ class ItemsController {
 	}
 	async editItems(req: Request, res: Response, next: NextFunction) {
 		try {
-			const id: number = ~~req.params.id;
-			const name: string = req.body.name;
-			const price: string = req.body.price;
-			const kal: string = req.body.kal;
-			const size: string = req.body.kal;
-			const rating: string = req.body.rating;
-			const description: string = req.body.description;
-			const image: IDBImage = req.body.image;
-			const quantity: number = req.body.quantity;
+			const id: number | null = ~~req.params.id ?? null;
+			const name: string | null = req.body.name ?? null;
+			const price: string | null = req.body.price ?? null;
+			const kal: string | null = req.body.kal ?? null;
+			const size: string | null = req.body.kal ?? null;
+			const rating: string | null = req.body.rating ?? null;
+			const description: string | null = req.body.description ?? null;
+			const image: IDBImage | null = req.body.image ?? null;
+			const quantity: number | null = req.body.quantity ?? null;
 
 			// if (decoded.id && decoded.iat) {
 			await ItemsService.editItems(
@@ -64,8 +64,31 @@ class ItemsController {
 				console.log(`Item with id=${id} has not deleted.`);
 			}
 			res.send({ id: id });
-
 		} catch (e) {}
+	}
+
+	async createItems(req: Request, res: Response, next: NextFunction) {
+		try {
+			const name: string | null = req.body.name ?? null;
+			const price: string | null = req.body.price ?? null;
+			const kal: string | null = req.body.kal ?? null;
+			const size: string | null = req.body.kal ?? null;
+			const rating: string | null = req.body.rating ?? null;
+			const description: string | null = req.body.description ?? null;
+			const image: IDBImage | null = req.body.image ?? null;
+			const quantity: number | null = req.body.quantity ?? null;
+
+			// const parsedImage = JSON
+			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!!",image, JSON.parse(JSON.stringify(image)));
+			
+			const insertId = await ItemsService.createItems(name, price, kal, size, rating, description, image, quantity);
+			console.log("insertId",insertId);
+			
+			res.send({ id: insertId });
+		} catch (e) {
+			console.log(e);
+			res.send(e);
+		}
 	}
 }
 

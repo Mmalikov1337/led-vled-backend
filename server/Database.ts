@@ -100,24 +100,43 @@ class Database {
 		}
 	}
 	async editOrders(
-		name: string,
-		tel: string,
-		email: string,
-		cityAddress: string,
-		houseNumber: string,
-		houseOrApartment: boolean,
-		postalCode: string,
-		promo: string,
-		instagram: string,
-		comment: string,
-		deliveryMethod: string,
-		status: OrderStatus,
-		uid: string,
-		date: Date,
-		confirmation_url: string,
-		id: number
+		name: string | null,
+		tel: string | null,
+		email: string | null,
+		cityAddress: string | null,
+		houseNumber: string | null,
+		houseOrApartment: boolean | null,
+		postalCode: string | null,
+		promo: string | null,
+		instagram: string | null,
+		comment: string | null,
+		deliveryMethod: string | null,
+		status: OrderStatus | null,
+		uid: string | null,
+		date: Date | null,
+		confirmation_url: string | null,
+		id: number | null
 	) {
 		try {
+			console.log([
+				name,
+				tel,
+				email,
+				cityAddress,
+				houseNumber,
+				houseOrApartment,
+				postalCode,
+				promo,
+				instagram,
+				comment,
+				deliveryMethod,
+				status,
+				uid,
+				date,
+				confirmation_url,
+				id,
+			],"<<<<<<<asdasdasd");
+			
 			await this.pool.execute(
 				"UPDATE orders SET " +
 					"name = ? , " +
@@ -192,15 +211,15 @@ class Database {
 	}
 
 	async editItems(
-		name: string,
-		price: string,
-		kal: string,
-		size: string,
-		rating: string,
-		description: string,
-		quantity: number,
-		image: IDBImage,
-		id: number
+		name: string | null,
+		price: string | null,
+		kal: string | null,
+		size: string | null,
+		rating: string | null,
+		description: string | null,
+		quantity: number | null,
+		image: IDBImage | null,
+		id: number | null
 	) {
 		try {
 			const [rows]: [ResultSetHeader, any] = await this.pool.execute(
@@ -242,6 +261,51 @@ class Database {
 			);
 			return rows.affectedRows > 0; // rows.affectedRows > 0 => true => успешно;
 		} catch (e) {
+			throw ServerError.internalError("Database error.");
+		}
+	}
+
+	async insertItems(
+		name: string | null,
+		price: string | null,
+		kal: string | null,
+		size: string | null,
+		rating: string | null,
+		description: string | null,
+		image: IDBImage | null,
+		quantity: number | null
+	) {
+		try {
+			const [rows]: [any, any] = await this.pool.execute(
+				`
+				INSERT INTO items (
+					name,
+					price,
+					kal,
+					size,
+					rating,
+					description,
+					quantity,
+					image
+				)
+				VALUES (
+					?,
+					?,
+					?,
+					?,
+					?,
+					?,
+					?,
+					?
+				)
+			`,
+				[name, price, kal, size, rating, description, quantity, image]
+			);
+			console.log(typeof rows, rows);
+			return rows.insertId;
+		} catch (e) {
+			console.log("Database error. insertItems", e.message, e.name);
+
 			throw ServerError.internalError("Database error.");
 		}
 	}

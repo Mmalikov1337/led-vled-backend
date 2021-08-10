@@ -99,6 +99,23 @@ var ItemsService = /** @class */ (function () {
             });
         });
     };
+    ItemsService.prototype.createItems = function (name, price, kal, size, rating, description, image, quantity) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Database_1["default"].insertItems(name, price, kal, size, rating, description, image, quantity)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        e_4 = _a.sent();
+                        throw e_4;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return ItemsService;
 }());
 exports["default"] = new ItemsService();

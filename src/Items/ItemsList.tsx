@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FC } from "react";
-import { EditButton, List, ListProps, useListContext } from "react-admin";
+import { CreateButton, EditButton, List, ListProps, useListContext } from "react-admin";
 import inflection from "inflection";
 import { Grid, Card, CardMedia, CardContent, CardActions, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,7 +27,13 @@ const useStyles = makeStyles({
 		justifyContent: "space-around",
 	},
 });
-
+const getImage = (data: Category) => {
+	try {
+		return data.image ? JSON.parse(data.image).src : "";
+	} catch (e) {
+		console.log(e.message, e.name, "<< getImage");
+	}
+};
 const ItemsGrid: FC = (props) => {
 	const classes = useStyles(props);
 	const { data, ids } = useListContext<Category>();
@@ -37,7 +43,7 @@ const ItemsGrid: FC = (props) => {
 				<Grid key={id} xs={12} sm={6} md={4} lg={3} xl={2} item>
 					<Card>
 						<CardMedia
-							image={data[id].image ? JSON.parse(data[id].image).src : ""}
+							image={getImage(data[id])}
 							className={classes.media}
 							onClick={() => {
 								console.log(data[id], data, "<<<");
@@ -54,6 +60,7 @@ const ItemsGrid: FC = (props) => {
 					</Card>
 				</Grid>
 			))}
+			<CreateButton basePath="/items"/>
 		</Grid>
 	) : null;
 };

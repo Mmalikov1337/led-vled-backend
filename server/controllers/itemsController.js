@@ -70,26 +70,27 @@ var ItemsController = /** @class */ (function () {
         });
     };
     ItemsController.prototype.editItems = function (req, res, next) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         return __awaiter(this, void 0, void 0, function () {
             var id, name_1, price, kal, size, rating, description, image, quantity, total, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_k) {
+                switch (_k.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        id = ~~req.params.id;
-                        name_1 = req.body.name;
-                        price = req.body.price;
-                        kal = req.body.kal;
-                        size = req.body.kal;
-                        rating = req.body.rating;
-                        description = req.body.description;
-                        image = req.body.image;
-                        quantity = req.body.quantity;
+                        _k.trys.push([0, 2, , 3]);
+                        id = (_a = ~~req.params.id) !== null && _a !== void 0 ? _a : null;
+                        name_1 = (_b = req.body.name) !== null && _b !== void 0 ? _b : null;
+                        price = (_c = req.body.price) !== null && _c !== void 0 ? _c : null;
+                        kal = (_d = req.body.kal) !== null && _d !== void 0 ? _d : null;
+                        size = (_e = req.body.kal) !== null && _e !== void 0 ? _e : null;
+                        rating = (_f = req.body.rating) !== null && _f !== void 0 ? _f : null;
+                        description = (_g = req.body.description) !== null && _g !== void 0 ? _g : null;
+                        image = (_h = req.body.image) !== null && _h !== void 0 ? _h : null;
+                        quantity = (_j = req.body.quantity) !== null && _j !== void 0 ? _j : null;
                         // if (decoded.id && decoded.iat) {
                         return [4 /*yield*/, itemsService_1["default"].editItems(name_1, price, kal, size, rating, description, image, quantity, id)];
                     case 1:
                         // if (decoded.id && decoded.iat) {
-                        _a.sent();
+                        _k.sent();
                         total = 1;
                         // res.setHeader("X-Total-Count", total.toString());
                         // res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
@@ -97,7 +98,7 @@ var ItemsController = /** @class */ (function () {
                         res.json({ id: id });
                         return [3 /*break*/, 3];
                     case 2:
-                        e_2 = _a.sent();
+                        e_2 = _k.sent();
                         console.log(e_2);
                         res.send(e_2);
                         return [3 /*break*/, 3];
@@ -127,6 +128,40 @@ var ItemsController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         e_3 = _a.sent();
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ItemsController.prototype.createItems = function (req, res, next) {
+        var _a, _b, _c, _d, _e, _f, _g, _h;
+        return __awaiter(this, void 0, void 0, function () {
+            var name_2, price, kal, size, rating, description, image, quantity, insertId, e_4;
+            return __generator(this, function (_j) {
+                switch (_j.label) {
+                    case 0:
+                        _j.trys.push([0, 2, , 3]);
+                        name_2 = (_a = req.body.name) !== null && _a !== void 0 ? _a : null;
+                        price = (_b = req.body.price) !== null && _b !== void 0 ? _b : null;
+                        kal = (_c = req.body.kal) !== null && _c !== void 0 ? _c : null;
+                        size = (_d = req.body.kal) !== null && _d !== void 0 ? _d : null;
+                        rating = (_e = req.body.rating) !== null && _e !== void 0 ? _e : null;
+                        description = (_f = req.body.description) !== null && _f !== void 0 ? _f : null;
+                        image = (_g = req.body.image) !== null && _g !== void 0 ? _g : null;
+                        quantity = (_h = req.body.quantity) !== null && _h !== void 0 ? _h : null;
+                        // const parsedImage = JSON
+                        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!!", image, JSON.parse(JSON.stringify(image)));
+                        return [4 /*yield*/, itemsService_1["default"].createItems(name_2, price, kal, size, rating, description, image, quantity)];
+                    case 1:
+                        insertId = _j.sent();
+                        console.log("insertId", insertId);
+                        res.send({ id: insertId });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_4 = _j.sent();
+                        console.log(e_4);
+                        res.send(e_4);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

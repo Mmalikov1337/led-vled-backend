@@ -214,23 +214,23 @@ class OrdersService {
 	}
 
 	async editOrders(
-		name: string,
-		tel: string,
-		email: string,
-		cityAddress: string,
-		houseNumber: string,
-		houseOrApartment: boolean,
-		postalCode: string,
-		promo: string,
-		instagram: string,
-		comment: string,
-		deliveryMethod: string,
-		status: OrderStatus,
-		uid: string,
-		date: Date,
-		confirmation_url: string,
-		// totalPrice: string,
-		id: number
+		name: string | null,
+		tel: string | null,
+		email: string | null,
+		cityAddress: string | null,
+		houseNumber: string | null,
+		houseOrApartment: boolean | null,
+		postalCode: string | null,
+		promo: string | null,
+		instagram: string | null,
+		comment: string | null,
+		deliveryMethod: string | null,
+		status: OrderStatus | null,
+		uid: string | null,
+		date: Date | null,
+		confirmation_url: string | null,
+		// totalPrice: string | null,
+		id: number | null
 	) {
 		const dbOrders = await Database.getOrders(id);
 		if (!dbOrders[0].id) {

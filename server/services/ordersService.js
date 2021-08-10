@@ -254,7 +254,7 @@ var OrdersService = /** @class */ (function () {
         });
     };
     OrdersService.prototype.editOrders = function (name, tel, email, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status, uid, date, confirmation_url, 
-    // totalPrice: string,
+    // totalPrice: string | null,
     id) {
         return __awaiter(this, void 0, void 0, function () {
             var dbOrders;

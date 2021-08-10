@@ -72,22 +72,22 @@ class OrdersController {
 	}
 	async editOrders(req: Request, res: Response, next: NextFunction) {
 		try {
-			const id: number = ~~req.params.id;
-			const name: string = req.body.name;
-			const tel: string = req.body.tel;
-			const email: string = req.body.email;
-			const cityAddress: string = req.body.cityAddress;
-			const houseNumber: string = req.body.houseNumber;
-			const houseOrApartment: boolean = req.body.houseOrApartment;
-			const postalCode: string = req.body.postalCode;
-			const promo: string = req.body.promo;
-			const instagram: string = req.body.instagram;
-			const comment: string = req.body.comment;
-			const deliveryMethod: string = req.body.deliveryMethod;
-			const status: OrderStatus = req.body.status;
-			const uid: string = req.body.uid;
-			const date: Date = new Date(req.body.date);
-			const confirmation_url: string = req.body.confirmation_url;
+			const id: number | null = ~~req.params.id ?? null;
+			const name: string | null = req.body.name ?? null;
+			const tel: string | null = req.body.tel ?? null;
+			const email: string | null = req.body.email ?? null;
+			const cityAddress: string | null = req.body.cityAddress ?? null;
+			const houseNumber: string | null = req.body.houseNumber ?? null;
+			const houseOrApartment: boolean | null = req.body.houseOrApartment ?? null;
+			const postalCode: string | null = req.body.postalCode ?? null;
+			const promo: string | null = req.body.promo ?? null;
+			const instagram: string | null = req.body.instagram ?? null;
+			const comment: string | null = req.body.comment ?? null;
+			const deliveryMethod: string | null = req.body.deliveryMethod ?? null;
+			const status: OrderStatus | null = req.body.status ?? null;
+			const uid: string | null = req.body.uid ?? null;
+			const date: Date | null = new Date(req.body.date) ?? null;
+			const confirmation_url: string | null = req.body.confirmation_url ?? null;
 			// const totalPrice: string = req.body.totalPrice;
 
 			await OrdersService.editOrders(

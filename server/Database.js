@@ -109,6 +109,24 @@ var Database = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
+                        console.log([
+                            name,
+                            tel,
+                            email,
+                            cityAddress,
+                            houseNumber,
+                            houseOrApartment,
+                            postalCode,
+                            promo,
+                            instagram,
+                            comment,
+                            deliveryMethod,
+                            status,
+                            uid,
+                            date,
+                            confirmation_url,
+                            id,
+                        ], "<<<<<<<asdasdasd");
                         return [4 /*yield*/, this.pool.execute("UPDATE orders SET " +
                                 "name = ? , " +
                                 "tel = ? , " +
@@ -262,6 +280,27 @@ var Database = /** @class */ (function () {
                         return [2 /*return*/, rows.affectedRows > 0]; // rows.affectedRows > 0 => true => успешно;
                     case 2:
                         e_8 = _a.sent();
+                        throw ServerError_1["default"].internalError("Database error.");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.insertItems = function (name, price, kal, size, rating, description, image, quantity) {
+        return __awaiter(this, void 0, void 0, function () {
+            var rows, e_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.execute("\n\t\t\t\tINSERT INTO items (\n\t\t\t\t\tname,\n\t\t\t\t\tprice,\n\t\t\t\t\tkal,\n\t\t\t\t\tsize,\n\t\t\t\t\trating,\n\t\t\t\t\tdescription,\n\t\t\t\t\tquantity,\n\t\t\t\t\timage\n\t\t\t\t)\n\t\t\t\tVALUES (\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?,\n\t\t\t\t\t?\n\t\t\t\t)\n\t\t\t", [name, price, kal, size, rating, description, quantity, image])];
+                    case 1:
+                        rows = (_a.sent())[0];
+                        console.log(typeof rows, rows);
+                        return [2 /*return*/, rows.insertId];
+                    case 2:
+                        e_9 = _a.sent();
+                        console.log("Database error. insertItems", e_9.message, e_9.name);
                         throw ServerError_1["default"].internalError("Database error.");
                     case 3: return [2 /*return*/];
                 }

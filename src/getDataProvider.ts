@@ -154,61 +154,71 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 		},
 
 		update: async (resource, params) => {
-			console.log("update_________________", resource, params);
-			params.previousData.image = JSON.parse(params.previousData.image)
-			params.data.image = JSON.parse(params.data.image)
-			if (resource == "items" || resource == "categories") {
-				if (params.previousData.image) {
-					console.log("params.previousData.image");
-					console.log("params.data.image",params.data.image, typeof params.data.image);
-					if (params.data.image) {
-						console.log("params.data.image>>>>>",params.data.image.src);
-						if (params.data.image.src != params.previousData.image.src) {
-							console.log("params.data.image.src != params.previousData.image.src");
-							//if (params.data.pucture != undefined) {
+			try {
+				console.log("update_________________", resource, params);
+				params.previousData.image =
+					typeof params.previousData.image == "string"
+						? JSON.parse(params.previousData.image)
+						: params.previousData.image;
+				params.data.image =
+					typeof params.data.image == "string" ? JSON.parse(params.data.image) : params.data.image;
+				console.log("JSON PARSED");
+
+				if (resource == "items" || resource == "categories") {
+					if (params.previousData.image) {
+						console.log("params.previousData.image");
+						console.log("params.data.image", params.data.image, typeof params.data.image);
+						if (params.data.image) {
+							console.log("params.data.image>>>>>", params.data.image.src);
+							if (params.data.image.src != params.previousData.image.src) {
+								console.log("params.data.image.src != params.previousData.image.src");
+								//if (params.data.pucture != undefined) {
+								let ref = storageRef.child(params.data.image.rawFile.path);
+								let uploadTask: any = await ref.put(params.data.image.rawFile);
+								// uploadTask = await uploadTask.on('state_changed')
+								let download = await ref.getDownloadURL();
+								params.data.image.src = download;
+								console.log(download);
+							} else {
+								console.log("params.data.image.src == params.previousData.image.src");
+							}
+						} else {
+							console.log("!params.data.image");
+							params.data.image = "";
+						}
+					} else {
+						console.log("!params.previousData.image");
+						if (params.data.image.src) {
+							console.log("!params.previousData.image params.data.image.src");
+							console.log(params);
+							console.log("src none");
 							let ref = storageRef.child(params.data.image.rawFile.path);
 							let uploadTask: any = await ref.put(params.data.image.rawFile);
 							// uploadTask = await uploadTask.on('state_changed')
 							let download = await ref.getDownloadURL();
 							params.data.image.src = download;
 							console.log(download);
-						} else {
-							console.log("params.data.image.src == params.previousData.image.src");
 						}
-					} else {
-						console.log("!params.data.image");
-						params.data.image = "";
-					}
-				} else {
-					console.log("!params.previousData.image");
-					if (params.data.image.src) {
-						console.log("!params.previousData.image params.data.image.src");
-						console.log(params);
-						console.log("src none");
-						let ref = storageRef.child(params.data.image.rawFile.path);
-						let uploadTask: any = await ref.put(params.data.image.rawFile);
-						// uploadTask = await uploadTask.on('state_changed')
-						let download = await ref.getDownloadURL();
-						params.data.image.src = download;
-						console.log(download);
 					}
 				}
+				return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+					method: "PUT",
+					body: JSON.stringify(params.data),
+					user: {
+						authenticated: true,
+						token: localStorage.getItem("token"),
+					},
+				}).then(({ json }) => ({ data: json }));
+			} catch (e) {
+				console.log(e.message, e.type, "UPDATE ERROR!!!!!!!!!!!");
 			}
-			return httpClient(`${apiUrl}/${resource}/${params.id}`, {
-				method: "PUT",
-				body: JSON.stringify(params.data),
-				user: {
-					authenticated: true,
-					token: localStorage.getItem("token"),
-				},
-			}).then(({ json }) => ({ data: json }));
 		},
 
 		// json-server doesn't handle filters on UPDATE route, so we fallback to calling UPDATE n times instead
 		updateMany: async (resource, params) => {
 			console.log("updateMany_________________", resource, params);
 
-			// if (params.data.picture) {
+			// if (params.data.image) {
 			// if (params.data.pucture != params.previousData.picture) {
 			let ref = storageRef.child(params.data.picture.rawFile.path);
 			let uploadTask: any = await ref.put(params.data.picture.rawFile);
@@ -232,14 +242,26 @@ function getProvider(apiUrl: string, httpClient = fetchUtils.fetchJson): DataPro
 
 		create: async (resource, params) => {
 			console.log("create_________________", resource, params);
-
-			if (resource == "items" || resource == "categories") {
-				let ref = storageRef.child(params.data.picture.rawFile.path);
-				let uploadTask: any = await ref.put(params.data.picture.rawFile);
+			// params.previousData.image = typeof params.previousData.image == "string" ? JSON.parse(params.previousData.image) : params.previousData.image;
+			params.data.image =
+				typeof params.data.image == "string" ? JSON.parse(params.data.image) : params.data.image;
+			console.log("JSON PARSED");
+			if ((resource == "items" || resource == "categories") && params.data.image) {
+				let ref = storageRef.child(params.data.image.rawFile.path);
+				let uploadTask: any = await ref.put(params.data.image.rawFile);
 				// uploadTask = await uploadTask.on('state_changed')
 				let download = await ref.getDownloadURL();
-				params.data.picture.src = download;
+				params.data.image.src = download;
 				console.log(download);
+			}
+			if (!params.data.image) {
+				params.data.image = {
+					rawFile: {
+						path: "no-product.png",
+					},
+					src: "https://firebasestorage.googleapis.com/v0/b/andante-cae72.appspot.com/o/no-product.png?alt=media&token=d74fffee-0dd5-4104-9d81-d767a42eab52",
+					title: "no-product.png",
+				};
 			}
 			return httpClient(`${apiUrl}/${resource}`, {
 				method: "POST",

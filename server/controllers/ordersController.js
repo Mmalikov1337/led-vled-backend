@@ -119,37 +119,38 @@ var OrdersController = /** @class */ (function () {
         });
     };
     OrdersController.prototype.editOrders = function (req, res, next) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
         return __awaiter(this, void 0, void 0, function () {
             var id, name_2, tel, email, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status_1, uid, date, confirmation_url, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_s) {
+                switch (_s.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        id = ~~req.params.id;
-                        name_2 = req.body.name;
-                        tel = req.body.tel;
-                        email = req.body.email;
-                        cityAddress = req.body.cityAddress;
-                        houseNumber = req.body.houseNumber;
-                        houseOrApartment = req.body.houseOrApartment;
-                        postalCode = req.body.postalCode;
-                        promo = req.body.promo;
-                        instagram = req.body.instagram;
-                        comment = req.body.comment;
-                        deliveryMethod = req.body.deliveryMethod;
-                        status_1 = req.body.status;
-                        uid = req.body.uid;
-                        date = new Date(req.body.date);
-                        confirmation_url = req.body.confirmation_url;
+                        _s.trys.push([0, 2, , 3]);
+                        id = (_a = ~~req.params.id) !== null && _a !== void 0 ? _a : null;
+                        name_2 = (_b = req.body.name) !== null && _b !== void 0 ? _b : null;
+                        tel = (_c = req.body.tel) !== null && _c !== void 0 ? _c : null;
+                        email = (_d = req.body.email) !== null && _d !== void 0 ? _d : null;
+                        cityAddress = (_e = req.body.cityAddress) !== null && _e !== void 0 ? _e : null;
+                        houseNumber = (_f = req.body.houseNumber) !== null && _f !== void 0 ? _f : null;
+                        houseOrApartment = (_g = req.body.houseOrApartment) !== null && _g !== void 0 ? _g : null;
+                        postalCode = (_h = req.body.postalCode) !== null && _h !== void 0 ? _h : null;
+                        promo = (_j = req.body.promo) !== null && _j !== void 0 ? _j : null;
+                        instagram = (_k = req.body.instagram) !== null && _k !== void 0 ? _k : null;
+                        comment = (_l = req.body.comment) !== null && _l !== void 0 ? _l : null;
+                        deliveryMethod = (_m = req.body.deliveryMethod) !== null && _m !== void 0 ? _m : null;
+                        status_1 = (_o = req.body.status) !== null && _o !== void 0 ? _o : null;
+                        uid = (_p = req.body.uid) !== null && _p !== void 0 ? _p : null;
+                        date = (_q = new Date(req.body.date)) !== null && _q !== void 0 ? _q : null;
+                        confirmation_url = (_r = req.body.confirmation_url) !== null && _r !== void 0 ? _r : null;
                         // const totalPrice: string = req.body.totalPrice;
                         return [4 /*yield*/, ordersService_1["default"].editOrders(name_2, tel, email, cityAddress, houseNumber, houseOrApartment, postalCode, promo, instagram, comment, deliveryMethod, status_1, uid, date, confirmation_url, id)];
                     case 1:
                         // const totalPrice: string = req.body.totalPrice;
-                        _a.sent();
+                        _s.sent();
                         res.status(200);
                         return [2 /*return*/, res.send({ id: id })];
                     case 2:
-                        e_2 = _a.sent();
+                        e_2 = _s.sent();
                         console.log(e_2);
                         res.send(e_2);
                         return [3 /*break*/, 3];
