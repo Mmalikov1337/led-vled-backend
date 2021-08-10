@@ -167,7 +167,7 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.execute("DELETE FROM orders	WHERE id = ?", [id])];
                     case 1:
                         rows = (_a.sent())[0];
-                        console.log(">>>", rows, rows.affectedRows > 0, "<<<");
+                        // console.log(">>>", rows, rows.affectedRows > 0, "<<<");
                         return [2 /*return*/, rows.affectedRows > 0]; // rows.affectedRows > 0 => true => успешно;
                     case 2:
                         e_4 = _a.sent();
@@ -188,10 +188,12 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.execute("SELECT * FROM items WHERE id = ?", [id])];
                     case 1:
                         rows = (_a.sent())[0];
+                        console.log(rows);
                         return [2 /*return*/, rows];
                     case 2: return [4 /*yield*/, this.pool.execute("SELECT * FROM items")];
                     case 3:
                         rows = (_a.sent())[0];
+                        console.log(rows);
                         return [2 /*return*/, rows];
                     case 4: return [3 /*break*/, 6];
                     case 5:

@@ -1,7 +1,8 @@
-import express from "express";
+import * as express from "express";
+import getAuthorizationMW from "./../middlewares/authorizationMW";
+import ItemsContrtoller from "./../controllers/itemsController";
+const itemsRouter = express.Router();
 
-const items = express.Router();
+itemsRouter.get("/", getAuthorizationMW(), ItemsContrtoller.getItems);
 
-items.get("/");
-
-export default items;
+export default itemsRouter;

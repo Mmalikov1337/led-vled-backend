@@ -55,6 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var config_1 = require("./config");
 var Database_1 = require("./Database");
+var items_1 = require("./routers/items");
 var orders_1 = require("./routers/orders");
 var express = require("express");
 var mysql = require("mysql2");
@@ -101,6 +102,7 @@ function main() {
             return next();
         });
         app.use("/api/orders", orders_1["default"]);
+        app.use("/api/items", items_1["default"]);
         // app.post("/api/orders", async (req, res, next) => {
         // 	try {
         // 		console.log("req.body", req.body);

@@ -5,7 +5,6 @@ import ClientError from "./../Errors/ClientError";
 class OrdersController {
 	async createOrder(req: Request, res: Response, next: NextFunction) {
 		try {
-			// console.log("req.body", req.body);
 			const basket: Array<IBasket> = req.body.basket;
 			/* ORDERDATA */
 			const name: string = req.body.orderData.name; // customer name : String
@@ -54,13 +53,11 @@ class OrdersController {
 				message: "OK",
 			});
 		} catch (e) {
-			// console.log(e);
 			next(e);
 		}
 	}
 	async getOrders(req: Request, res: Response, next: NextFunction) {
 		try {
-			// console.log(`app.get("/api/orders"`, req.path, req.query, req.params);
 			const { total, orders } = await OrdersService.getOrders(req.query, ~~req.params.id ?? null);
 
 			res.setHeader("X-Total-Count", total.toString());
@@ -70,7 +67,6 @@ class OrdersController {
 				return res.send(...orders);
 			else return res.send(orders);
 		} catch (e) {
-			// console.log(e);
 			next(e);
 		}
 	}
@@ -121,7 +117,6 @@ class OrdersController {
 		}
 	}
 	async deleteOrders(req: Request, res: Response, next: NextFunction) {
-		// app.delete("/api/orders/:id", async (req: Request, res: Response) => {
 		try {
 			const id = ~~req.params.id;
 			if (!id) {
@@ -138,19 +133,6 @@ class OrdersController {
 		}
 		// });
 	}
-	// async getOrder(req: Request, res: Response, next: NextFunction) {
-	// 	try {
-	// 		console.log(`app.get("/api/orders/asd"`, req.path, req.query, req.params);
-
-	// 		const { total, orders } = await ordersService.getOrders(req.query, ~~req.params.id);
-	// 		res.setHeader("X-Total-Count", total.toString());
-	// 		res.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
-	// 		return res.send(...orders);
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 		res.send(e);
-	// 	}
-	// }
 }
 
 export default new OrdersController();

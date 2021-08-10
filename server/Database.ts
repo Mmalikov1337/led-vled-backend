@@ -168,7 +168,7 @@ class Database {
 				"DELETE FROM orders	WHERE id = ?",
 				[id]
 			);
-			console.log(">>>", rows, rows.affectedRows > 0, "<<<");
+			// console.log(">>>", rows, rows.affectedRows > 0, "<<<");
 			return rows.affectedRows > 0; // rows.affectedRows > 0 => true => успешно;
 		} catch (e) {
 			throw ServerError.internalError("Database error.");
@@ -184,7 +184,7 @@ class Database {
 				);
 				return rows;
 			} else {
-				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items`);
+				const [rows]: [RowDataPacket[], any] = await this.pool.execute(`SELECT * FROM items`);			
 				return rows;
 			}
 		} catch (e) {

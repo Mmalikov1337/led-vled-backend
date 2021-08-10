@@ -19,6 +19,7 @@
 import { Request, Response } from "express";
 import { tokenKey } from "./config";
 import Database from "./Database";
+import itemsRouter from "./routers/items";
 import ordersRouter from "./routers/orders";
 
 const express = require("express");
@@ -70,6 +71,7 @@ export default function main() {
 			return next();
 		});
 		app.use("/api/orders", ordersRouter);
+		app.use("/api/items", itemsRouter);
 
 		// app.post("/api/orders", async (req, res, next) => {
 		// 	try {
