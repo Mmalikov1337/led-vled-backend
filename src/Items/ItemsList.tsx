@@ -53,6 +53,12 @@ const ItemsGrid: FC = (props) => {
 							<Typography variant="h5" component="h2" align="center">
 								{data[id].name}
 							</Typography>
+							<Typography variant="subtitle2" component="p" align="left" color="textPrimary">
+								{data[id].quantity}шт
+							</Typography>
+							<Typography variant="subtitle2" component="span" align="right" color="secondary">
+								{data[id].price}₽
+							</Typography>
 						</CardContent>
 						<CardActions classes={{ spacing: classes.actionSpacer }}>
 							<EditButton basePath="/items" record={data[id]} />

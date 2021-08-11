@@ -40,11 +40,14 @@ import {
 // import IconEvent from "@material-ui/icons/Event";
 
 import jsonExport from "jsonexport/dist";
-import { JsonField, JsonInput } from "react-admin-json-view";
+import { JsonField } from "react-admin-json-view";
 const exporter = (posts) => {
 	const postsForExport = posts.map((post) => {
+		post.basket = post.basket ? JSON.stringify(post.basket) : ""
 		return post;
 	});
+	console.log("postsForExport>>",postsForExport,"<<postsForExport");
+	
 	jsonExport(
 		postsForExport,
 		{

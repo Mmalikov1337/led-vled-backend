@@ -17,6 +17,7 @@ function App() {
 		<Admin dataProvider={dataProvider} title={"Лёд Влёд"} authProvider={authProvider} history={history} dashboard={Dashboard}>
 			<Resource name="orders" list={OrderList} edit={OrderEdit}/>
 			<Resource name="items"  {...items}/>
+			
 		</Admin>
 	);
 }
