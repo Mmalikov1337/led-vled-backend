@@ -5,8 +5,8 @@ module.exports = {
 	entry: [
 		'./src/index.tsx'
 	],
-	// mode: 'production',
-	mode: "development",
+	mode: 'production',
+	// mode: "development",
 	watch: false,
 	output: {
 		path: __dirname + "/dist",

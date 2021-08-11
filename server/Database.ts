@@ -118,25 +118,28 @@ class Database {
 		id: number | null
 	) {
 		try {
-			console.log([
-				name,
-				tel,
-				email,
-				cityAddress,
-				houseNumber,
-				houseOrApartment,
-				postalCode,
-				promo,
-				instagram,
-				comment,
-				deliveryMethod,
-				status,
-				uid,
-				date,
-				confirmation_url,
-				id,
-			],"<<<<<<<asdasdasd");
-			
+			console.log(
+				[
+					name,
+					tel,
+					email,
+					cityAddress,
+					houseNumber,
+					houseOrApartment,
+					postalCode,
+					promo,
+					instagram,
+					comment,
+					deliveryMethod,
+					status,
+					uid,
+					date,
+					confirmation_url,
+					id,
+				],
+				"<<<<<<<asdasdasd"
+			);
+
 			await this.pool.execute(
 				"UPDATE orders SET " +
 					"name = ? , " +
@@ -306,6 +309,16 @@ class Database {
 		} catch (e) {
 			console.log("Database error. insertItems", e.message, e.name);
 
+			throw ServerError.internalError("Database error.");
+		}
+	}
+
+	async getAdminByName(name) {
+		try {
+			const [rows] = await this.pool.execute("SELECT * FROM admins WHERE username = ?", [name]);
+			return rows;
+		} catch (e) {
+			console.log("Database error. getAdminByName", e.message, e.name);
 			throw ServerError.internalError("Database error.");
 		}
 	}

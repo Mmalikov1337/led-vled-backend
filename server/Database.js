@@ -307,6 +307,26 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.getAdminByName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var rows, e_10;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.execute("SELECT * FROM admins WHERE username = ?", [name])];
+                    case 1:
+                        rows = (_a.sent())[0];
+                        return [2 /*return*/, rows];
+                    case 2:
+                        e_10 = _a.sent();
+                        console.log("Database error. getAdminByName", e_10.message, e_10.name);
+                        throw ServerError_1["default"].internalError("Database error.");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return Database;
 }());
 exports["default"] = new Database();

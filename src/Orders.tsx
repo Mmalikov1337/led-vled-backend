@@ -1,4 +1,4 @@
-import React, { cloneElement, useContext } from "react";
+import React from "react";
 import { FC } from "react";
 import RichTextInput from 'ra-input-rich-text';
 import {
@@ -10,37 +10,22 @@ import {
 	Datagrid,
 	List,
 	Create,
-	Button,
-	CreateButton,
-	ExportButton,
-	TopToolbar,
 	downloadCSV,
 	Filter,
-	FilterProps,
-	NullableBooleanInput,
 	SearchInput,
 	DateField,
 	NumberInput,
 	CheckboxGroupInput,
 	BooleanInput,
-	EditButton,
 	FormTab,
-	minValue,
-	number,
-	ReferenceManyField,
-	required,
 	TabbedForm,
-	useGetOne,
 	ChipField,
 	NumberField,
 	SelectInput,
-	RichTextField,
 } from "react-admin";
-
-// import IconEvent from "@material-ui/icons/Event";
-
 import jsonExport from "jsonexport/dist";
 import { JsonField } from "react-admin-json-view";
+
 const exporter = (posts) => {
 	const postsForExport = posts.map((post) => {
 		post.basket = post.basket ? JSON.stringify(post.basket) : ""
@@ -76,10 +61,6 @@ const exporter = (posts) => {
 		}
 	);
 };
-// const postFilters = [
-//     <TextInput label="Search" source="q" alwaysOn />,
-//     <TextInput label="Title" source="title" defaultValue="Hello, World!" />,
-// ];
 
 const OrderFilter: FC = (props) => (
 	<Filter {...props}>
@@ -124,10 +105,6 @@ interface IPostTitle {
 		title: string;
 	};
 }
-const PostTitle: FC<IPostTitle> = ({ record }) => {
-	return <span>Post {record ? `"${record.title}"` : ""}</span>;
-};
-
 export const OrderEdit = (props) => {
 	return (
 		<Edit {...props}>

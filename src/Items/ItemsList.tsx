@@ -1,11 +1,9 @@
 import * as React from "react";
 import { FC } from "react";
 import { CreateButton, EditButton, List, ListProps, useListContext } from "react-admin";
-import inflection from "inflection";
 import { Grid, Card, CardMedia, CardContent, CardActions, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Record } from "ra-core";
-// import LinkToRelatedProducts from './LinkToRelatedProducts';
 
 interface Category extends Record {
 	name: string;
@@ -39,7 +37,7 @@ const ItemsGrid: FC = (props) => {
 	const { data, ids } = useListContext<Category>();
 	return ids ? (
 		<Grid container spacing={2} className={classes.root}>
-			{ids.map((id) => (
+			{ids.map((id, index) => (
 				<Grid key={id} xs={12} sm={6} md={4} lg={3} xl={2} item>
 					<Card>
 						<CardMedia

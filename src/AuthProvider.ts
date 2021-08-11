@@ -1,9 +1,9 @@
 import { AuthProvider } from "react-admin";
 
-function getAuthProvider(apiUrl:string){
-	const authProvider : AuthProvider = {
+function getAuthProvider(apiUrl: string) {
+	const authProvider: AuthProvider = {
 		login: ({ username, password }) => {
-			const request = new Request(`${apiUrl}/authenticate`, {
+			const request = new Request(`${apiUrl}/auth/authenticate`, {
 				method: "POST",
 				body: JSON.stringify({ username, password }),
 				headers: new Headers({ "Content-Type": "application/json" }),
@@ -13,10 +13,16 @@ function getAuthProvider(apiUrl:string){
 					if (response.status < 200 || response.status >= 300) {
 						throw new Error(response.statusText);
 					}
-					return response.json();
+					const res = response.json();
+					// console.log("res", res);
+
+					return res;
 				})
-				.then(({ token }) => {
+				.then((res) => {
 					// const decodedToken = decodeJwt(token);
+					console.log("thenres",res);
+					
+					const { token } = res;
 					localStorage.setItem("token", token);
 					// localStorage.setItem('permissions', decodedToken.permissions);
 				});
@@ -32,7 +38,7 @@ function getAuthProvider(apiUrl:string){
 		checkAuth: () => {
 			console.log("check auth");
 			const token = localStorage.getItem("token");
-			const request = new Request(`${apiUrl}/checkAuth`, {
+			const request = new Request(`${apiUrl}/auth/checkAuth`, {
 				method: "POST",
 				body: JSON.stringify({ token }),
 				headers: new Headers({ "Content-Type": "application/json" }),
@@ -54,7 +60,7 @@ function getAuthProvider(apiUrl:string){
 			return role ? Promise.resolve(role) : Promise.reject();
 		},
 	};
-	return authProvider
+	return authProvider;
 }
 
 export default getAuthProvider;
